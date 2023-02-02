@@ -5,7 +5,7 @@
        dockerfile: Sources/Dockerfile
        context: Sources/
        registry: hub.codefirst.iut.uca.fr
-       repo: hub.codefirst.iut.uca.fr/my.login/myRepository
+       repo: hub.codefirst.iut.uca.fr/LeapHitTeam/LeapHitServer
        username:
          from_secret: SECRET_REGISTRY_USERNAME
        password:
