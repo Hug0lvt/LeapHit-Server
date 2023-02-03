@@ -1,9 +1,14 @@
 # docker image build
-  - name: docker-server
+trigger:
+    event:
+      - push
+      
+steps:
+  - name: Build Docker Image
     image: plugins/docker
     settings:
-       dockerfile: Sources/Dockerfile
-       context: Sources/
+       dockerfile: code/Dockerfile
+       context: code/
        registry: hub.codefirst.iut.uca.fr
        repo: hub.codefirst.iut.uca.fr/LeapHitTeam/LeapHitServer
        username:
