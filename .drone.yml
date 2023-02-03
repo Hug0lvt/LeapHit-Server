@@ -1,19 +1,20 @@
-# docker image build
 kind: pipeline
-name: Build Docker Image
+type: docker
+name: CI_CD_LeapHit
 
 trigger:
     event:
       - push
-      
-  - name: Build Docker Image
-    image: plugins/docker
-    settings:
-       dockerfile: code/Dockerfile
-       context: code/
-       registry: hub.codefirst.iut.uca.fr
-       repo: hub.codefirst.iut.uca.fr/LeapHitTeam/LeapHitServer
-       username:
-         from_secret: SECRET_REGISTRY_USERNAME
-       password:
-         from_secret: SECRET_REGISTRY_PASSWORD
+
+steps:
+    - name: Build Docker Image
+      image: plugins/docker
+      settings:
+          dockerfile: code/Dockerfile
+          context: code/
+          registry: hub.codefirst.iut.uca.fr
+          repo: hub.codefirst.iut.uca.fr/LeapHitTeam/LeapHitServer
+          username:
+            from_secret: SECRET_REGISTRY_USERNAME
+          password:
+            from_secret: SECRET_REGISTRY_PASSWORD
