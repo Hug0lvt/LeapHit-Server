@@ -1,9 +1,11 @@
 # docker image build
+kind: pipeline
+name: Build Docker Image
+
 trigger:
     event:
       - push
       
-steps:
   - name: Build Docker Image
     image: plugins/docker
     settings:
