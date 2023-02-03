@@ -1,9 +1,13 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+#FROM mcr.microsoft.com/dotnet/sdk:6.0
 
-WORKDIR /server
+#WORKDIR /server
 
-COPY ./code/server
+#COPY ./code/server
 
-CMD dotnet run -p /server/Server.csproj
+#CMD dotnet run -p /server/Server.csproj
 
-EXPOSE 3131
+#EXPOSE 3131
+
+
+FROM alpine
+CMD ["echo", "Hello StackOverflow!"]
