@@ -1,9 +1,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0
 
-WORKDIR /app
+WORKDIR /server
 
-COPY ./Sources /app
+COPY ./code/server
 
-CMD dotnet run -p /app/LeapHitServer.csproj
+CMD dotnet run -p /server/Server.csproj
 
 EXPOSE 3131
