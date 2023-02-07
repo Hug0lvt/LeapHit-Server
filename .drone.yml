@@ -19,4 +19,11 @@ steps:
           password:
             from_secret: SECRET_REGISTRY_PASSWORD
 
-            
+      # container deployment
+    - name: deploy-server
+      image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+      environment:
+          IMAGENAME: hub.codefirst.iut.uca.fr/leap-hit-team/leap-hit-server:latest
+          CONTAINERNAME: server-container
+          COMMAND: create
+          OVERWRITE: true
