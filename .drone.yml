@@ -7,7 +7,7 @@ trigger:
       - push
 
 steps:
-    - name: Build Docker Image
+    - name: build-docker-image
       image: plugins/docker
       settings:
           dockerfile: code/Dockerfile
@@ -27,3 +27,5 @@ steps:
           CONTAINERNAME: server-container
           COMMAND: create
           OVERWRITE: true
+          ADMINS: brunoda_costa_cunha,noanrandon,ramikhedair,lorisperret,hugolivet
+    depends_on: [ build-docker-image ]
