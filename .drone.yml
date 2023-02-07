@@ -13,7 +13,7 @@ steps:
           dockerfile: code/Dockerfile
           context: code/
           registry: hub.codefirst.iut.uca.fr
-          repo: hub.codefirst.iut.uca.fr/LeapHitTeam/LeapHitServer
+          repo: hub.codefirst.iut.uca.fr/leap-hit-team/leap-hit-server
           username:
             from_secret: SECRET_REGISTRY_USERNAME
           password:
