@@ -8,6 +8,5 @@
 
 #EXPOSE 3131
 
-
 FROM alpine
 CMD ["echo", "Hello StackOverflow!"]
