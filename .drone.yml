@@ -28,4 +28,4 @@ steps:
           COMMAND: create
           OVERWRITE: true
           ADMINS: brunoda_costa_cunha,noanrandon,ramikhedair,lorisperret,hugolivet
-    depends_on: [ build-docker-image ]
+      depends_on: [ build-docker-image ]
