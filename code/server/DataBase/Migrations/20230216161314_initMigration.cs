@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace DataBase.Migrations
 {
     /// <inheritdoc />
@@ -12,7 +14,7 @@ namespace DataBase.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Players",
+                name: "Player",
                 columns: table => new
                 {
                     playerId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -23,37 +25,37 @@ namespace DataBase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Players", x => x.playerId);
+                    table.PrimaryKey("PK_Player", x => x.playerId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chats",
+                name: "Chat",
                 columns: table => new
                 {
                     chatId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    sender = table.Column<int>(type: "INTEGER", nullable: false),
-                    recipient = table.Column<int>(type: "INTEGER", nullable: false)
+                    player1 = table.Column<int>(type: "INTEGER", nullable: false),
+                    player2 = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chats", x => x.chatId);
+                    table.PrimaryKey("PK_Chat", x => x.chatId);
                     table.ForeignKey(
-                        name: "FK_Chats_Players_recipient",
-                        column: x => x.recipient,
-                        principalTable: "Players",
+                        name: "FK_Chat_Player_player1",
+                        column: x => x.player1,
+                        principalTable: "Player",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Chats_Players_sender",
-                        column: x => x.sender,
-                        principalTable: "Players",
+                        name: "FK_Chat_Player_player2",
+                        column: x => x.player2,
+                        principalTable: "Player",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Games",
+                name: "Game",
                 columns: table => new
                 {
                     gameId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -65,77 +67,105 @@ namespace DataBase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Games", x => x.gameId);
+                    table.PrimaryKey("PK_Game", x => x.gameId);
                     table.ForeignKey(
-                        name: "FK_Games_Players_loser",
+                        name: "FK_Game_Player_loser",
                         column: x => x.loser,
-                        principalTable: "Players",
+                        principalTable: "Player",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Games_Players_winner",
+                        name: "FK_Game_Player_winner",
                         column: x => x.winner,
-                        principalTable: "Players",
+                        principalTable: "Player",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Messages",
+                name: "Message",
                 columns: table => new
                 {
                     messageId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     message = table.Column<string>(type: "TEXT", nullable: false),
-                    timestamp = table.Column<TimeSpan>(type: "TEXT", nullable: false),
+                    timestamp = table.Column<DateTime>(type: "TEXT", nullable: false),
                     player = table.Column<int>(type: "INTEGER", nullable: false),
                     chat = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Messages", x => x.messageId);
+                    table.PrimaryKey("PK_Message", x => x.messageId);
                     table.ForeignKey(
-                        name: "FK_Messages_Chats_chat",
+                        name: "FK_Message_Chat_chat",
                         column: x => x.chat,
-                        principalTable: "Chats",
+                        principalTable: "Chat",
                         principalColumn: "chatId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Messages_Players_player",
+                        name: "FK_Message_Player_player",
                         column: x => x.player,
-                        principalTable: "Players",
+                        principalTable: "Player",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Chats_recipient",
-                table: "Chats",
-                column: "recipient");
+            migrationBuilder.InsertData(
+                table: "Player",
+                columns: new[] { "playerId", "name", "nbBallTouchTotal", "timePlayed" },
+                values: new object[,]
+                {
+                    { 1, "Rami", 20, 120 },
+                    { 2, "Hugo", 90, 250 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Chat",
+                columns: new[] { "chatId", "player1", "player2" },
+                values: new object[] { 1, 1, 2 });
+
+            migrationBuilder.InsertData(
+                table: "Game",
+                columns: new[] { "gameId", "durationGame", "loser", "nbMaxEchanges", "winner" },
+                values: new object[] { 1, 65, 2, 5, 1 });
+
+            migrationBuilder.InsertData(
+                table: "Message",
+                columns: new[] { "messageId", "chat", "message", "player", "timestamp" },
+                values: new object[,]
+                {
+                    { 1, 1, "Salut mon gars !", 1, new DateTime(2023, 2, 16, 17, 5, 12, 0, DateTimeKind.Unspecified) },
+                    { 2, 1, "Comment tu vas ?", 2, new DateTime(2023, 2, 16, 17, 12, 35, 0, DateTimeKind.Unspecified) }
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chats_sender",
-                table: "Chats",
-                column: "sender");
+                name: "IX_Chat_player1",
+                table: "Chat",
+                column: "player1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_loser",
-                table: "Games",
+                name: "IX_Chat_player2",
+                table: "Chat",
+                column: "player2");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Game_loser",
+                table: "Game",
                 column: "loser");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_winner",
-                table: "Games",
+                name: "IX_Game_winner",
+                table: "Game",
                 column: "winner");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_chat",
-                table: "Messages",
+                name: "IX_Message_chat",
+                table: "Message",
                 column: "chat");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_player",
-                table: "Messages",
+                name: "IX_Message_player",
+                table: "Message",
                 column: "player");
         }
 
@@ -143,16 +173,16 @@ namespace DataBase.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "Game");
 
             migrationBuilder.DropTable(
-                name: "Messages");
+                name: "Message");
 
             migrationBuilder.DropTable(
-                name: "Chats");
+                name: "Chat");
 
             migrationBuilder.DropTable(
-                name: "Players");
+                name: "Player");
         }
     }
 }

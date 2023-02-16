@@ -8,7 +8,7 @@ namespace DataBase.Entity
     {
         public int messageId { get; set; }
         public string message { get; set; }
-        public TimeSpan timestamp { get; set; }
+        public DateTime timestamp { get; set; }
         public int player { get; set; }
         public int chat { get; set; }
 

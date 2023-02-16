@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataBase.Migrations
 {
-    [DbContext(typeof(PongDbContext))]
-    [Migration("20230216153344_initMigration")]
+    [DbContext(typeof(PongDbContextWithStub))]
+    [Migration("20230216161314_initMigration")]
     partial class initMigration
     {
         /// <inheritdoc />
@@ -26,19 +26,27 @@ namespace DataBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("recipient")
+                    b.Property<int>("player1")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("sender")
+                    b.Property<int>("player2")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("chatId");
 
-                    b.HasIndex("recipient");
+                    b.HasIndex("player1");
 
-                    b.HasIndex("sender");
+                    b.HasIndex("player2");
 
-                    b.ToTable("Chats");
+                    b.ToTable("Chat");
+
+                    b.HasData(
+                        new
+                        {
+                            chatId = 1,
+                            player1 = 1,
+                            player2 = 2
+                        });
                 });
 
             modelBuilder.Entity("DataBase.Entity.Game", b =>
@@ -65,7 +73,17 @@ namespace DataBase.Migrations
 
                     b.HasIndex("winner");
 
-                    b.ToTable("Games");
+                    b.ToTable("Game");
+
+                    b.HasData(
+                        new
+                        {
+                            gameId = 1,
+                            durationGame = 65,
+                            loser = 2,
+                            nbMaxEchanges = 5,
+                            winner = 1
+                        });
                 });
 
             modelBuilder.Entity("DataBase.Entity.Message", b =>
@@ -84,7 +102,7 @@ namespace DataBase.Migrations
                     b.Property<int>("player")
                         .HasColumnType("INTEGER");
 
-                    b.Property<TimeSpan>("timestamp")
+                    b.Property<DateTime>("timestamp")
                         .HasColumnType("TEXT");
 
                     b.HasKey("messageId");
@@ -93,7 +111,25 @@ namespace DataBase.Migrations
 
                     b.HasIndex("player");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Message");
+
+                    b.HasData(
+                        new
+                        {
+                            messageId = 1,
+                            chat = 1,
+                            message = "Salut mon gars !",
+                            player = 1,
+                            timestamp = new DateTime(2023, 2, 16, 17, 5, 12, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            messageId = 2,
+                            chat = 1,
+                            message = "Comment tu vas ?",
+                            player = 2,
+                            timestamp = new DateTime(2023, 2, 16, 17, 12, 35, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("DataBase.Entity.Player", b =>
@@ -114,26 +150,42 @@ namespace DataBase.Migrations
 
                     b.HasKey("playerId");
 
-                    b.ToTable("Players");
+                    b.ToTable("Player");
+
+                    b.HasData(
+                        new
+                        {
+                            playerId = 1,
+                            name = "Rami",
+                            nbBallTouchTotal = 20,
+                            timePlayed = 120
+                        },
+                        new
+                        {
+                            playerId = 2,
+                            name = "Hugo",
+                            nbBallTouchTotal = 90,
+                            timePlayed = 250
+                        });
                 });
 
             modelBuilder.Entity("DataBase.Entity.Chat", b =>
                 {
-                    b.HasOne("DataBase.Entity.Player", "PlayerRecipient")
+                    b.HasOne("DataBase.Entity.Player", "PlayerId1")
                         .WithMany()
-                        .HasForeignKey("recipient")
+                        .HasForeignKey("player1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataBase.Entity.Player", "PlayerSender")
+                    b.HasOne("DataBase.Entity.Player", "PlayerId2")
                         .WithMany()
-                        .HasForeignKey("sender")
+                        .HasForeignKey("player2")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PlayerRecipient");
+                    b.Navigation("PlayerId1");
 
-                    b.Navigation("PlayerSender");
+                    b.Navigation("PlayerId2");
                 });
 
             modelBuilder.Entity("DataBase.Entity.Game", b =>
