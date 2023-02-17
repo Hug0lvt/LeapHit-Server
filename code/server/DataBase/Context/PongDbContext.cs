@@ -1,14 +1,14 @@
 ﻿using DataBase.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataBase
+namespace DataBase.Context
 {
     public class PongDbContext : DbContext
     {
-        DbSet<Player> Players { get; set; }
-        DbSet<Game> Games { get; set; }
-        DbSet<Message> Messages { get; set; }
-        DbSet<Chat> Chats { get; set; }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Chat> Chats { get; set; }
 
         public PongDbContext() { }
         public PongDbContext(DbContextOptions<PongDbContext> options) : base(options) { }

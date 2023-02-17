@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataBase
+namespace DataBase.Context
 {
     public class PongDbContextWithStub : PongDbContext
     {
