@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 
@@ -9,7 +8,6 @@ class Program
     static void Main(string[] args)
     {
         Console.WriteLine("Welcome to LeapHit Multiplayer - Server");
-        Debug.WriteLine("test");
         StartServer();
     }
 
