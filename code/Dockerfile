@@ -5,9 +5,8 @@ COPY server/Server/Program.cs Program.cs
 RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/runtime:6.0
-EXPOSE 3131
 WORKDIR /app
 COPY --from=build /app/out .
 ENTRYPOINT ["dotnet", "app.dll"]
 
-
+EXPOSE 3131

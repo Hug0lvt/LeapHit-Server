@@ -16,6 +16,7 @@ class Program
         IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("0.0.0.0"), 3131);
         UdpClient server = new UdpClient(endPoint);
         Console.WriteLine("Server started, waiting for clients to connect...");
+        Console.WriteLine(endPoint.Address.ToString());
 
         while (true)
         {
