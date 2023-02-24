@@ -15,10 +15,11 @@ namespace DataBase.DataManager
             using (var context = new PongDbContext())
             {
                 await context.Chats.AddAsync(chat);
+                await context.SaveChangesAsync();
             }
         }
 
-        public Task<bool> RemoveChat(int id)
+        public async Task<bool> RemoveChat(int id)
         {
             using (var context = new PongDbContext())
             {
@@ -26,9 +27,10 @@ namespace DataBase.DataManager
                 if (chat != null)
                 {
                     var result = context.Chats.Remove(chat);
-                    return Task.FromResult(result != null);
+                    await context.SaveChangesAsync();
+                    return result != null;
                 }
-                return Task.FromResult(false);
+                return false;
             }
         }
     }

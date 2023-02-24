@@ -1,83 +1,50 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataBase.DataManager;
+using DataBase.Entity;
+using DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLeapHit.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ChatController : Controller
     {
-        // GET: ChatController
-        public ActionResult Index()
+
+        private readonly DbDataManager _dataManager;
+
+
+        public ChatController(DbDataManager dataManager)
         {
-            return View();
+            _dataManager = dataManager;
         }
 
-        // GET: ChatController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: ChatController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ChatController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> AddChat([FromBody] DTOChat dtoChat)
         {
-            try
+            var player1 = await _dataManager.GetPlayer(dtoChat.PlayerId2.playerId);
+            var player2 = await _dataManager.GetPlayer(dtoChat.PlayerId2.playerId);
+
+            var chat = new Chat
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                chatId = dtoChat.chatId,
+                player1 = player1.playerId,
+                player2 = player2.playerId
+            };
+
+            await _dataManager.AddChat(chat);
+            return Ok();
         }
 
-        // GET: ChatController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> RemoveChat(int id)
         {
-            return View();
-        }
-
-        // POST: ChatController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
+            var result = await _dataManager.RemoveChat(id);
+            if (result)
             {
-                return RedirectToAction(nameof(Index));
+                return Ok(result);
             }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ChatController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ChatController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return NotFound(result);
         }
     }
 }
