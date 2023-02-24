@@ -15,10 +15,11 @@ namespace DataBase.DataManager
             using (var context = new PongDbContext())
             {
                 await context.Games.AddAsync(game);
+                await context.SaveChangesAsync();
             }
         }
 
-        public Task<bool> RemoveGame(int id)
+        public async Task<bool> RemoveGame(int id)
         {
             using (var context = new PongDbContext())
             {
@@ -26,9 +27,10 @@ namespace DataBase.DataManager
                 if (game != null)
                 {
                     var result = context.Games.Remove(game);
-                    return Task.FromResult(result != null);
+                    await context.SaveChangesAsync();
+                    return result != null;
                 }
-                return Task.FromResult(false);
+                return false;
             }
         }
 

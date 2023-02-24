@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{1D3CF318-8453-4D0C-B11D-2A6B7E44AA47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{240EEEA0-7EFB-4919-A5C9-584DC6505C58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataBase", "DataBase\DataBase.csproj", "{240EEEA0-7EFB-4919-A5C9-584DC6505C58}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiLeapHit", "ApiLeapHit\ApiLeapHit.csproj", "{693F37D1-B10C-45B2-A180-24D26B5A4841}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{BDA37278-912D-47E9-BD69-47A924A69004}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{240EEEA0-7EFB-4919-A5C9-584DC6505C58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{240EEEA0-7EFB-4919-A5C9-584DC6505C58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{240EEEA0-7EFB-4919-A5C9-584DC6505C58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{693F37D1-B10C-45B2-A180-24D26B5A4841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{693F37D1-B10C-45B2-A180-24D26B5A4841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{693F37D1-B10C-45B2-A180-24D26B5A4841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{693F37D1-B10C-45B2-A180-24D26B5A4841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDA37278-912D-47E9-BD69-47A924A69004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA37278-912D-47E9-BD69-47A924A69004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA37278-912D-47E9-BD69-47A924A69004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA37278-912D-47E9-BD69-47A924A69004}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

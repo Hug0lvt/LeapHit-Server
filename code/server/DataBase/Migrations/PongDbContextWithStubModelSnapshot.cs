@@ -35,7 +35,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("player2");
 
-                    b.ToTable("Chat");
+                    b.ToTable("Chats");
 
                     b.HasData(
                         new
@@ -70,7 +70,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("winner");
 
-                    b.ToTable("Game");
+                    b.ToTable("Games");
 
                     b.HasData(
                         new
@@ -108,7 +108,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("player");
 
-                    b.ToTable("Message");
+                    b.ToTable("Messages");
 
                     b.HasData(
                         new
@@ -147,7 +147,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("playerId");
 
-                    b.ToTable("Player");
+                    b.ToTable("Players");
 
                     b.HasData(
                         new

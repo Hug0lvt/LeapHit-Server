@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(PongDbContextWithStub))]
-    [Migration("20230216161314_initMigration")]
-    partial class initMigration
+    [Migration("20230222115848_mymigration")]
+    partial class mymigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("player2");
 
-                    b.ToTable("Chat");
+                    b.ToTable("Chats");
 
                     b.HasData(
                         new
@@ -73,7 +73,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("winner");
 
-                    b.ToTable("Game");
+                    b.ToTable("Games");
 
                     b.HasData(
                         new
@@ -111,7 +111,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("player");
 
-                    b.ToTable("Message");
+                    b.ToTable("Messages");
 
                     b.HasData(
                         new
@@ -150,7 +150,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("playerId");
 
-                    b.ToTable("Player");
+                    b.ToTable("Players");
 
                     b.HasData(
                         new
