@@ -17,10 +17,11 @@ namespace DataBase.DataManager
             using (var context = new PongDbContext())
             {
                 await context.Players.AddAsync(player);
+                await context.SaveChangesAsync();
             }
         }
 
-        public Task<bool> RemovePlayer(int id)
+        public async Task<bool> RemovePlayer(int id)
         {
             using (var context = new PongDbContext())
             {
@@ -28,13 +29,14 @@ namespace DataBase.DataManager
                 if (player != null) 
                 { 
                     var result = context.Players.Remove(player);
-                    return Task.FromResult(result != null);
+                    await context.SaveChangesAsync();
+                    return result != null;
                 }
-                return Task.FromResult(false);
+                return false;
             }
         }
 
-        public Task<Player> UpdatePlayer(int id, string newName)
+        public async Task<Player> UpdatePlayer(int id, string newName)
         {
             using (var context = new PongDbContext())
             {
@@ -43,7 +45,8 @@ namespace DataBase.DataManager
                 {
                     player.name = newName;
                 }
-                return Task.FromResult<Player>(player);
+                await   context.SaveChangesAsync();
+                return player;
             }
         }
 
