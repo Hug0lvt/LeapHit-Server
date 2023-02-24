@@ -16,6 +16,7 @@ namespace DataBase.DataManager
             using (var context = new PongDbContext())
             {
                 await context.Messages.AddAsync(message);
+                await context.SaveChangesAsync();
             }
         }
 
@@ -28,7 +29,7 @@ namespace DataBase.DataManager
             }
         }
 
-        public Task<bool> RemoveMessage(int id)
+        public async Task<bool> RemoveMessage(int id)
         {
             using (var context = new PongDbContext())
             {
@@ -36,9 +37,10 @@ namespace DataBase.DataManager
                 if (message != null)
                 {
                     var result = context.Messages.Remove(message);
-                    return Task.FromResult(result != null);
+                    await context.SaveChangesAsync();
+                    return result != null;
                 }
-                return Task.FromResult(false);
+                return false;
             }
         }
     }

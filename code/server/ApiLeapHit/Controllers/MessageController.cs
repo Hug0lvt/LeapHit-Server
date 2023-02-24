@@ -1,83 +1,77 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataBase.DataManager;
+using DataBase.Entity;
+using DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLeapHit.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class MessageController : Controller
     {
-        // GET: MessageController
-        public ActionResult Index()
+        private readonly DbDataManager _dataManager;
+
+
+        public MessageController(DbDataManager dataManager)
         {
-            return View();
+            _dataManager = dataManager;
         }
 
-        // GET: MessageController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DTOMessage>> ReceiveMessage(int id)
         {
-            return View();
+            var message = await _dataManager.ReceiveMessage(id);
+            if (message == null)
+            {
+                return NotFound();
+            }
+
+            var player = await _dataManager.GetPlayer(message.player);
+
+
+            var dtoMessage = new DTOMessage
+            {
+                messageId = message.messageId,
+                message = message.message,
+                timestamp = message.timestamp,
+                PlayerId = new DTOPlayer
+                {
+                    playerId = player.playerId,
+                    name = player.name,
+                    nbBallTouchTotal = player.nbBallTouchTotal,
+                    timePlayed = player.timePlayed
+                }
+            };
+            return Ok(dtoMessage);
         }
 
-        // GET: MessageController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: MessageController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> SendMessage([FromBody] DTOMessage dtoMessage)
         {
-            try
+            var player = await _dataManager.GetPlayer(dtoMessage.PlayerId.playerId);
+
+            var message = new Message
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                messageId = dtoMessage.messageId,
+                message = dtoMessage.message,
+                timestamp = dtoMessage.timestamp,
+                player = player.playerId
+            };
+
+            await _dataManager.SendMessage(message);
+            return Ok();
         }
 
-        // GET: MessageController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> RemoveMessage(int id)
         {
-            return View();
-        }
-
-        // POST: MessageController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
+            var result = await _dataManager.RemoveMessage(id);
+            if (result)
             {
-                return RedirectToAction(nameof(Index));
+                return Ok(result);
             }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: MessageController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: MessageController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return NotFound(result);
         }
     }
 }
