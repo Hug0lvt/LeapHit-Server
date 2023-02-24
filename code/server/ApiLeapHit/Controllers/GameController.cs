@@ -71,19 +71,12 @@ namespace ApiLeapHit.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> RemoveGame(int id)
         {
-            try
+            var result = await _dataManager.RemoveGame(id);
+            if (result)
             {
-                var result = await _dataManager.RemoveGame(id);
-                if (result)
-                {
-                    return Ok();
-                }
-                return NotFound();
+                return Ok(result);
             }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, FactoryMessage.MessageCreate("Une erreur est survenue lors de la récupération des champions"));
-            }
+            return NotFound(result);
         }
     }
 }
