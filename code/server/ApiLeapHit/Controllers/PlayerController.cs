@@ -7,6 +7,8 @@ using System.Net;
 
 namespace ApiLeapHit.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class PlayerController : ControllerBase
     {
         private readonly DbDataManager _dataManager;
