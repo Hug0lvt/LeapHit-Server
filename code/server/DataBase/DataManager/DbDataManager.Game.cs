@@ -42,5 +42,32 @@ namespace DataBase.DataManager
                 return Task.FromResult<Game>(game);
             }
         }
+
+        public Task<List<Game>> GetGameById(int id)
+        {
+            using (var context = new PongDbContext())
+            {
+                var games = context.Games.Where(g => g.winner == id || g.loser == id).ToList();
+                return Task.FromResult(games);
+            }
+        }
+
+        public Task<List<Game>> GetGames()
+        {
+            using (var context = new PongDbContext())
+            {
+                var games = context.Games.ToList();
+                return Task.FromResult(games);
+            }
+        }
+
+        public Task<int> GetNbGames()
+        {
+            using (var context = new PongDbContext())
+            {
+                var nbgames = context.Games.ToList().Count();
+                return Task.FromResult(nbgames);
+            }
+        }
     }
 }

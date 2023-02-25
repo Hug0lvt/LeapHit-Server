@@ -33,5 +33,16 @@ namespace DataBase.DataManager
                 return false;
             }
         }
+
+        public Task<List<Chat>> GetChats()
+        {
+            using (var context = new PongDbContext())
+            {
+                var chats = context.Chats.ToList();
+                return Task.FromResult(chats);
+            }
+        }
+
+
     }
 }
