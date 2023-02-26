@@ -58,5 +58,14 @@ namespace DataBase.DataManager
                 return Task.FromResult<Player>(player);
             }
         }
+
+        public Task<List<Player>> GetPlayers()
+        {
+            using (var context = new PongDbContext())
+            {
+                var players = context.Players.ToList();
+                return Task.FromResult(players);
+            }
+        }
     }
 }

@@ -16,5 +16,16 @@ namespace ApiLeapHit.Mapper
             };
             return dtoPlayer;
         }
+
+        public static Player ToPlayer(this DTOPlayer dtoPlayer)
+        {
+            return new Player
+            {
+                playerId = dtoPlayer.playerId,
+                name = dtoPlayer.name,
+                nbBallTouchTotal = dtoPlayer.nbBallTouchTotal,
+                timePlayed = dtoPlayer.timePlayed
+            };
+        }
     }
 }

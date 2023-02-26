@@ -30,28 +30,27 @@ namespace ApiLeapHit.Controllers
         {
             try
             {
+                _logger.LogInformation("Récupération de la game avec l'identifiant {id}", id);
+
                 var game = await _dataManager.GetGame(id);
                 if (game == null)
                 {
-                    return NotFound(new ApiResponse<DTOGame>("La game avec l'identifiant " + id + " n'existe pas."));
+                    var message = $"La game avec l'identifiant {id} n'existe pas";
+                    _logger.LogWarning(message);
+                    return NotFound(new ApiResponse<object>(message));
                 }
-                var winner = await _dataManager.GetPlayer(game.winner);
-                //if (winner == null)
-                //{
-                //    return NotFound("Le joueur avec l'identifiant " + game.winner + " n'existe pas.");
-                //}
 
+                var winner = await _dataManager.GetPlayer(game.winner);
                 var loser = await _dataManager.GetPlayer(game.loser);
-                //if (loser == null)
-                //{
-                //    return NotFound("Le joueur avec l'identifiant " + game.loser + " n'existe pas.");
-                //}
+
+                _logger.LogInformation("Récupération des joueurs pour la game avec l'identifiant {id}", id);
 
                 return Ok(new ApiResponse<DTOGame>("Récupération de la game réussie.", game.ToDto(winner, loser)));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<Game>("Une erreur est survenue lors de la récupération des données : " + ex.Message));
+                _logger.LogError(ex, $"Une erreur est survenue lors de la récupération des données pour la game avec l'identifiant {id}");
+                return StatusCode(500, new ApiResponse<object>($"Une erreur est survenue lors de la récupération des données : {ex.Message}"));
             }
         }
 
@@ -60,137 +59,132 @@ namespace ApiLeapHit.Controllers
         {
             try
             {
+                _logger.LogInformation("Récupération de toutes les games.");
+
                 var games = await _dataManager.GetGames();
                 if (games == null)
                 {
-                    return NotFound(new ApiResponse<IEnumerable<DTOGame>>("Aucune game n'ont été trouvées."));
+                    var message = "Aucune game n'a été trouvée.";
+                    _logger.LogWarning(message);
+                    return NotFound(new ApiResponse<object>(message));
                 }
 
-                //StringBuilder errorMessage = new StringBuilder();
                 var dtoGames = new List<DTOGame>();
+
                 foreach (var game in games)
                 {
                     var winner = await _dataManager.GetPlayer(game.winner);
                     var loser = await _dataManager.GetPlayer(game.loser);
 
-                    //if (winner == null || loser == null)
-                    //{
-                    //    errorMessage.Append("Le joueur gagnant ou le joueur perdant n'existe pas pour le jeu avec l'identifiant ");
-                    //    errorMessage.Append(game.gameId);
-                    //    errorMessage.Append(".");
-                    //    break;
-                    //}
+                    //ce cas n'est jamais censé arrivé
+                    if (winner == null || loser == null)
+                    {
+                        _logger.LogError($"Le joueur gagnant ou le joueur perdant n'existe pas pour le jeu avec l'identifiant {game.gameId}.");
+                        continue;
+                    }
+
                     dtoGames.Add(game.ToDto(winner, loser));
                 }
 
-                //if (errorMessage.Length > 0)
-                //{
-                //    return NotFound(errorMessage.ToString());
-                //}
-                return Ok(new ApiResponse<IEnumerable<DTOGame>>("La récupération des games à réussit." , dtoGames));
+                _logger.LogInformation("{Count} games ont été récupérées.", dtoGames.Count);
+                return Ok(new ApiResponse<IEnumerable<DTOGame>>("La récupération des games a réussi.", dtoGames));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<Game>("Une erreur est survenue lors de la récupération des données : " + ex.Message));
+                var message = "Une erreur est survenue lors de la récupération des données.";
+                _logger.LogError(ex, message);
+                return StatusCode(500, new ApiResponse<object>($"{message} {ex.Message}"));
             }
         }
 
         [HttpGet("byPlayer/{id}")]
         public async Task<ActionResult<IEnumerable<DTOGame>>> GetGameByIdPlayer(int id)
         {
-            try { 
+            try
+            {
                 var games = await _dataManager.GetGameById(id);
+
                 if (games == null || games.Count == 0)
                 {
-                    return NotFound(new ApiResponse<IEnumerable<DTOGame>>("Aucune game trouvé pour le joueur avec l'id  : " + id));
+                    var message = $"Aucune game trouvée pour le joueur avec l'id {id}.";
+                    _logger.LogInformation(message);
+                    return NotFound(new ApiResponse<object>(message));
                 }
-                //StringBuilder errorMessage = new StringBuilder();
+
                 var dtoGames = new List<DTOGame>();
+
                 foreach (var game in games)
                 {
                     var winner = await _dataManager.GetPlayer(game.winner);
                     var loser = await _dataManager.GetPlayer(game.loser);
 
-
-                    //if (winner == null)
-                    //{
-                    //    errorMessage.Append("Le joueur gagnant n'existe pas pour le jeu avec l'identifiant ");
-                    //    errorMessage.Append(game.gameId);
-                    //    errorMessage.Append(".");
-                    //    break;
-                    //}
-
-                    //if (loser == null)
-                    //{
-                    //    errorMessage.Append("Le joueur perdant n'existe pas pour le jeu avec l'identifiant ");
-                    //    errorMessage.Append(game.gameId);
-                    //    errorMessage.Append(".");
-                    //    break;
-                    //}
-
                     dtoGames.Add(game.ToDto(winner, loser));
                 }
 
-                //if (errorMessage.Length > 0)
-                //{
-                //    return NotFound(errorMessage.ToString());
-                //}
-                return Ok(new ApiResponse<IEnumerable<DTOGame>>("Récupérations réussis des games pour le joueur " + id, dtoGames));
+                var successMessage = $"Récupération réussie des games pour le joueur avec l'id {id}.";
+                _logger.LogInformation(successMessage);
+                return Ok(new ApiResponse<IEnumerable<DTOGame>>(successMessage, dtoGames));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<Game>("Une erreur est survenue lors de la récupération des données : " + ex.Message));
+                var errorMessage = $"Une erreur est survenue lors de la récupération des games pour le joueur avec l'id {id}.";
+                _logger.LogError(errorMessage + " Error message: " + ex.Message);
+                return StatusCode(500, new ApiResponse<object>(errorMessage));
             }
         }
 
         [HttpPost]
         public async Task<ActionResult> AddGame([FromBody] DTOGameWithIdPlayer dtoGame)
         {
-            try { 
+            try
+            {
                 var winner = await _dataManager.GetPlayer(dtoGame.playerWinner);
                 var loser = await _dataManager.GetPlayer(dtoGame.playerLoser);
 
-                //StringBuilder errorMessage = new StringBuilder();
-
-                //if (winner == null)
+                //if (winner == null || loser == null)
                 //{
-                //    errorMessage.Append("Le joueur gagnant avec l'identifiant ");
-                //    errorMessage.Append(dtoGame.playerWinner.playerId);
-                //    errorMessage.Append(" n'existe pas.");
-                //    return NotFound(errorMessage.ToString());
-                //}
-
-                //if (loser == null)
-                //{
-                //    errorMessage.Append("Le joueur perdant avec l'identifiant ");
-                //    errorMessage.Append(dtoGame.playerLoser.playerId);
-                //    errorMessage.Append(" n'existe pas.");
-                //    return NotFound(errorMessage.ToString());
+                //    var errorMessage = "Le joueur gagnant ou le joueur perdant n'existe pas pour la partie avec l'identifiant " + dtoGame.gameId + ".";
+                //    _logger.LogError(errorMessage);
+                //    return NotFound(new ApiResponse<Game>(errorMessage));
                 //}
 
                 var game = dtoGame.ToGame(winner, loser);
-                return Ok(new ApiResponse<Game>("La game a été ajoutée avec succès.", game));
+                await _dataManager.AddGame(game);
+
+                var successMessage = "La partie avec l'identifiant " + game.gameId + " a été ajoutée avec succès.";
+                _logger.LogInformation(successMessage);
+                return Ok(new ApiResponse<Game>(successMessage, game));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<Game>("Une erreur est survenue lors de la récupération des données : " + ex.Message));
+                var errorMessage = "Une erreur est survenue lors de l'ajout de la partie : " + ex.Message;
+                _logger.LogError(errorMessage);
+                return StatusCode(500, new ApiResponse<object>(errorMessage));
             }
         }
 
-    [HttpDelete("{id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> RemoveGame(int id)
         {
-            try { 
+            try
+            {
                 var result = await _dataManager.RemoveGame(id);
                 if (result)
                 {
-                    return Ok(new ApiResponse<object>( "La game avec l'identifiant " + id + " a été supprimée avec succès."));
+                    var successMessage = $"La game avec l'identifiant {id} a été supprimée avec succès.";
+                    _logger.LogInformation(successMessage);
+                    return Ok(new ApiResponse<object>(successMessage));
                 }
-                return NotFound(new ApiResponse<object>("La game avec l'identifiant " + id + " n'existe pas."));
+
+                var notFoundMessage = $"La game avec l'identifiant {id} n'existe pas.";
+                _logger.LogInformation(notFoundMessage);
+                return NotFound(new ApiResponse<object>(notFoundMessage));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<object>("Une erreur est survenue lors de la récupération des données : " + ex.Message));
+                var errorMessage = $"Une erreur est survenue lors de la suppression de la game avec l'identifiant {id} : {ex.Message}";
+                _logger.LogError(errorMessage);
+                return StatusCode(500, new ApiResponse<object>(errorMessage));
             }
         }
     }
