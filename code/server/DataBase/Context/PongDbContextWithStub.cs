@@ -19,7 +19,7 @@ namespace DataBase.Context
             Player player2 = new() { playerId = 2, name = "Hugo", timePlayed = 250, nbBallTouchTotal = 90 };
             modelBuilder.Entity<Player>().HasData(player1, player2);
 
-            Game game = new() { gameId = 1, durationGame = 65, nbMaxEchanges = 5, winner = 1, loser = 2 };
+            Game game = new() { gameId = 1, durationGame = 65, nbMaxEchanges = 5, winner = 1, loser = 2, scoreLoser = 2, scoreWinner = 6};
             modelBuilder.Entity<Game>().HasData(game);
 
             Chat chat = new() { chatId = 1, player1 = 1, player2 = 2 };

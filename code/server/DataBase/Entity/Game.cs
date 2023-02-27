@@ -12,6 +12,10 @@ namespace DataBase.Entity
         public int winner { get; set; }
         public int loser { get; set; }
 
+        public int scoreWinner { get; set; }
+
+        public int scoreLoser { get; set; }
+
         [ForeignKey("winner")]
         public Player PlayerWinner { get; set; }
 
