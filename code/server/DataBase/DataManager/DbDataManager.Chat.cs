@@ -15,10 +15,11 @@ namespace DataBase.DataManager
             using (var context = new PongDbContext())
             {
                 await context.Chats.AddAsync(chat);
+                await context.SaveChangesAsync();
             }
         }
 
-        public Task<bool> RemoveChat(int id)
+        public async Task<bool> RemoveChat(int id)
         {
             using (var context = new PongDbContext())
             {
@@ -26,10 +27,47 @@ namespace DataBase.DataManager
                 if (chat != null)
                 {
                     var result = context.Chats.Remove(chat);
-                    return Task.FromResult(result != null);
+                    await context.SaveChangesAsync();
+                    return result != null;
                 }
-                return Task.FromResult(false);
+                return false;
             }
         }
+
+        public Task<List<Chat>> GetChats()
+        {
+            using (var context = new PongDbContext())
+            {
+                var chats = context.Chats.ToList();
+                return Task.FromResult(chats);
+            }
+        }
+        public Task<Chat> GetChat(int id)
+        {
+            using (var context = new PongDbContext())
+            {
+                var chat = context.Chats.Where(g => g.chatId == id).ToList().FirstOrDefault();
+                return Task.FromResult<Chat>(chat);
+            }
+        }
+
+        public Task<List<Chat>> GetChatsByIdPlayer(int id)
+        {
+            using (var context = new PongDbContext())
+            {
+                var chats = context.Chats.Where(g => g.player1 == id || g.player2 == id).ToList();
+                return Task.FromResult(chats);
+            }
+        }
+
+        public Task<List<Chat>> GetChatsByIdPlayers(int idPlayer1, int idPlayer2)
+        {
+            using (var context = new PongDbContext())
+            {
+                var chats = context.Chats.Where(g => (g.player1 == idPlayer1 && g.player2 == idPlayer2) || (g.player1 == idPlayer2 && g.player2 == idPlayer1)).ToList();
+                return Task.FromResult(chats);
+            }
+        }
+
     }
 }

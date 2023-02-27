@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataBase.Migrations
 {
     /// <inheritdoc />
-    public partial class initMigration : Migration
+    public partial class mymigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Player",
+                name: "Players",
                 columns: table => new
                 {
                     playerId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -25,11 +25,11 @@ namespace DataBase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Player", x => x.playerId);
+                    table.PrimaryKey("PK_Players", x => x.playerId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chat",
+                name: "Chats",
                 columns: table => new
                 {
                     chatId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -39,23 +39,23 @@ namespace DataBase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chat", x => x.chatId);
+                    table.PrimaryKey("PK_Chats", x => x.chatId);
                     table.ForeignKey(
-                        name: "FK_Chat_Player_player1",
+                        name: "FK_Chats_Players_player1",
                         column: x => x.player1,
-                        principalTable: "Player",
+                        principalTable: "Players",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Chat_Player_player2",
+                        name: "FK_Chats_Players_player2",
                         column: x => x.player2,
-                        principalTable: "Player",
+                        principalTable: "Players",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Game",
+                name: "Games",
                 columns: table => new
                 {
                     gameId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -67,23 +67,23 @@ namespace DataBase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Game", x => x.gameId);
+                    table.PrimaryKey("PK_Games", x => x.gameId);
                     table.ForeignKey(
-                        name: "FK_Game_Player_loser",
+                        name: "FK_Games_Players_loser",
                         column: x => x.loser,
-                        principalTable: "Player",
+                        principalTable: "Players",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Game_Player_winner",
+                        name: "FK_Games_Players_winner",
                         column: x => x.winner,
-                        principalTable: "Player",
+                        principalTable: "Players",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Message",
+                name: "Messages",
                 columns: table => new
                 {
                     messageId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -95,23 +95,23 @@ namespace DataBase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Message", x => x.messageId);
+                    table.PrimaryKey("PK_Messages", x => x.messageId);
                     table.ForeignKey(
-                        name: "FK_Message_Chat_chat",
+                        name: "FK_Messages_Chats_chat",
                         column: x => x.chat,
-                        principalTable: "Chat",
+                        principalTable: "Chats",
                         principalColumn: "chatId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Message_Player_player",
+                        name: "FK_Messages_Players_player",
                         column: x => x.player,
-                        principalTable: "Player",
+                        principalTable: "Players",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Player",
+                table: "Players",
                 columns: new[] { "playerId", "name", "nbBallTouchTotal", "timePlayed" },
                 values: new object[,]
                 {
@@ -120,17 +120,17 @@ namespace DataBase.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Chat",
+                table: "Chats",
                 columns: new[] { "chatId", "player1", "player2" },
                 values: new object[] { 1, 1, 2 });
 
             migrationBuilder.InsertData(
-                table: "Game",
+                table: "Games",
                 columns: new[] { "gameId", "durationGame", "loser", "nbMaxEchanges", "winner" },
                 values: new object[] { 1, 65, 2, 5, 1 });
 
             migrationBuilder.InsertData(
-                table: "Message",
+                table: "Messages",
                 columns: new[] { "messageId", "chat", "message", "player", "timestamp" },
                 values: new object[,]
                 {
@@ -139,33 +139,33 @@ namespace DataBase.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chat_player1",
-                table: "Chat",
+                name: "IX_Chats_player1",
+                table: "Chats",
                 column: "player1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chat_player2",
-                table: "Chat",
+                name: "IX_Chats_player2",
+                table: "Chats",
                 column: "player2");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Game_loser",
-                table: "Game",
+                name: "IX_Games_loser",
+                table: "Games",
                 column: "loser");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Game_winner",
-                table: "Game",
+                name: "IX_Games_winner",
+                table: "Games",
                 column: "winner");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Message_chat",
-                table: "Message",
+                name: "IX_Messages_chat",
+                table: "Messages",
                 column: "chat");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Message_player",
-                table: "Message",
+                name: "IX_Messages_player",
+                table: "Messages",
                 column: "player");
         }
 
@@ -173,16 +173,16 @@ namespace DataBase.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Game");
+                name: "Games");
 
             migrationBuilder.DropTable(
-                name: "Message");
+                name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "Chat");
+                name: "Chats");
 
             migrationBuilder.DropTable(
-                name: "Player");
+                name: "Players");
         }
     }
 }

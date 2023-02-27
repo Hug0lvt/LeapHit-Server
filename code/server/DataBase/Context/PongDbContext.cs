@@ -19,7 +19,7 @@ namespace DataBase.Context
 
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite($"Data Source=PongDB.db");
+                optionsBuilder.UseSqlite($"Data Source=../DataBase/PongDB.db");
             }
         }
     }
