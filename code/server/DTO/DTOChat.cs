@@ -9,7 +9,7 @@ namespace DTO
     public class DTOChat
     {
         public int chatId { get; set; }
-        public DTOPlayer PlayerId1 { get; set; }
-        public DTOPlayer PlayerId2 { get; set; }
+        public int PlayerId1 { get; set; }
+        public int PlayerId2 { get; set; }
     }
 }

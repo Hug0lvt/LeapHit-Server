@@ -11,7 +11,7 @@ namespace DTO
         public int messageId { get; set; }
         public string message { get; set; }
         public DateTime timestamp { get; set; }
-        public DTOPlayer PlayerId { get; set; }
-        public DTOChat ChatId { get; set; }
+        public int PlayerId { get; set; }
+        public int ChatId { get; set; }
     }
 }

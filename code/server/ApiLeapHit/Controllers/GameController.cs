@@ -40,12 +40,9 @@ namespace ApiLeapHit.Controllers
                     return NotFound(new ApiResponse<object>(message));
                 }
 
-                var winner = await _dataManager.GetPlayer(game.winner);
-                var loser = await _dataManager.GetPlayer(game.loser);
-
                 _logger.LogInformation("Récupération des joueurs pour la game avec l'identifiant {id}", id);
 
-                return Ok(new ApiResponse<DTOGame>("Récupération de la game réussie.", game.ToDto(winner, loser)));
+                return Ok(new ApiResponse<DTOGame>("Récupération de la game réussie.", game.ToDto()));
             }
             catch (Exception ex)
             {
@@ -83,7 +80,7 @@ namespace ApiLeapHit.Controllers
                         continue;
                     }
 
-                    dtoGames.Add(game.ToDto(winner, loser));
+                    dtoGames.Add(game.ToDto());
                 }
 
                 _logger.LogInformation("{Count} games ont été récupérées.", dtoGames.Count);
@@ -118,7 +115,13 @@ namespace ApiLeapHit.Controllers
                     var winner = await _dataManager.GetPlayer(game.winner);
                     var loser = await _dataManager.GetPlayer(game.loser);
 
-                    dtoGames.Add(game.ToDto(winner, loser));
+                    //ce cas n'est jamais censé arrivé
+                    if (winner == null || loser == null)
+                    {
+                        _logger.LogError($"Le joueur gagnant ou le joueur perdant n'existe pas pour le jeu avec l'identifiant {game.gameId}.");
+                        continue;
+                    }
+                    dtoGames.Add(game.ToDto());
                 }
 
                 var successMessage = $"Récupération réussie des games pour le joueur avec l'id {id}.";
@@ -134,7 +137,7 @@ namespace ApiLeapHit.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddGame([FromBody] DTOGameWithIdPlayer dtoGame)
+        public async Task<ActionResult> AddGame([FromBody] DTOGame dtoGame)
         {
             try
             {
@@ -148,7 +151,7 @@ namespace ApiLeapHit.Controllers
                 //    return NotFound(new ApiResponse<Game>(errorMessage));
                 //}
 
-                var game = dtoGame.ToGame(winner, loser);
+                var game = dtoGame.ToGame();
                 await _dataManager.AddGame(game);
 
                 var successMessage = "La partie avec l'identifiant " + game.gameId + " a été ajoutée avec succès.";

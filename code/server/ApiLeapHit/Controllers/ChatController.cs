@@ -27,10 +27,10 @@ namespace ApiLeapHit.Controllers
         {
             try
             {
-                var player1 = await _dataManager.GetPlayer(dtoChat.PlayerId1.playerId);
-                var player2 = await _dataManager.GetPlayer(dtoChat.PlayerId2.playerId);
+                var player1 = await _dataManager.GetPlayer(dtoChat.PlayerId1);
+                var player2 = await _dataManager.GetPlayer(dtoChat.PlayerId2);
 
-                await _dataManager.AddChat(dtoChat.ToChat(player1, player2));
+                await _dataManager.AddChat(dtoChat.ToChat());
 
                 var success_message = $"Le chat entre {player1.name} et {player2.name} a été ajouté avec succès.";
                 _logger.LogInformation(success_message);
@@ -60,10 +60,10 @@ namespace ApiLeapHit.Controllers
                 var dtoChats = new List<DTOChat>();
                 foreach (var chat in chats)
                 {
-                    var player1 = await _dataManager.GetPlayer(chat.player1);
-                    var player2 = await _dataManager.GetPlayer(chat.player2);
+                    //var player1 = await _dataManager.GetPlayer(chat.player1);
+                    //var player2 = await _dataManager.GetPlayer(chat.player2);
 
-                    var dtoChat = chat.ToDto(player1, player2);
+                    var dtoChat = chat.ToDto();
 
                     dtoChats.Add(dtoChat);
                 }
@@ -93,10 +93,10 @@ namespace ApiLeapHit.Controllers
                     return NotFound(new ApiResponse<object>(message));
                 }
 
-                var player1 = await _dataManager.GetPlayer(chat.player1);
-                var player2 = await _dataManager.GetPlayer(chat.player2);
+                //var player1 = await _dataManager.GetPlayer(chat.player1);
+                //var player2 = await _dataManager.GetPlayer(chat.player2);
 
-                var dtoChat = chat.ToDto(player1, player2);
+                var dtoChat = chat.ToDto();
 
                 var success_message = $"La récupération du chat a réussi pour le chat {id}.";
                 _logger.LogInformation(success_message);
@@ -126,12 +126,7 @@ namespace ApiLeapHit.Controllers
                 var dtoChats = new List<DTOChat>();
                 foreach (var chat in chats)
                 {
-                    var player1 = await _dataManager.GetPlayer(chat.player1);
-                    var player2 = await _dataManager.GetPlayer(chat.player2);
-
-                    var dtoChat = chat.ToDto(player1, player2);
-
-                    dtoChats.Add(dtoChat);
+                    dtoChats.Add(chat.ToDto());
                 }
 
                 var success_message = $"La récupération des chats a réussi pour l'id : {id}. Nombre de chats : {dtoChats.Count}";
@@ -162,10 +157,10 @@ namespace ApiLeapHit.Controllers
                 var dtoChats = new List<DTOChat>();
                 foreach (var chat in chats)
                 {
-                    var player1 = await _dataManager.GetPlayer(chat.player1);
-                    var player2 = await _dataManager.GetPlayer(chat.player2);
+                    //var player1 = await _dataManager.GetPlayer(chat.player1);
+                    //var player2 = await _dataManager.GetPlayer(chat.player2);
 
-                    dtoChats.Add(chat.ToDto(player1, player2));
+                    dtoChats.Add(chat.ToDto());
                 }
 
                 var success_message = $"La récupération des chats a réussi pour les joueurs {idPlayer1} et {idPlayer2}. Nombre de chats : {dtoChats.Count}";

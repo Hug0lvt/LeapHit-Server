@@ -1,4 +1,5 @@
-﻿using DataBase.DataManager;
+﻿using ApiLeapHit.Mapper;
+using DataBase.DataManager;
 using DataBase.Entity;
 using DTO;
 using DTO.Factory;
@@ -27,25 +28,17 @@ namespace ApiLeapHit.Controllers
         {
             try
             {
-                var player = await _dataManager.GetPlayer(dtoMessage.PlayerId.playerId);
+                var player = await _dataManager.GetPlayer(dtoMessage.PlayerId);
                 if (player == null)
                 {
-                    _logger.LogWarning($"Le joueur avec l'identifiant {dtoMessage.PlayerId.playerId} n'existe pas.");
-                    return NotFound(new ApiResponse<object>($"Le joueur avec l'identifiant {dtoMessage.PlayerId.playerId} n'existe pas."));
+                    _logger.LogWarning($"Le joueur avec l'identifiant {dtoMessage.PlayerId} n'existe pas.");
+                    return NotFound(new ApiResponse<object>($"Le joueur avec l'identifiant {dtoMessage.PlayerId} n'existe pas."));
                 }
 
-                var message = new Message
-                {
-                    messageId = dtoMessage.messageId,
-                    message = dtoMessage.message,
-                    timestamp = dtoMessage.timestamp,
-                    player = player.playerId
-                };
+                await _dataManager.SendMessage(dtoMessage.ToMessage());
 
-                await _dataManager.SendMessage(message);
-
-                _logger.LogInformation($"Le message avec l'identifiant {message.messageId} a été envoyé avec succès.");
-                return Ok(new ApiResponse<object>($"Le message avec l'identifiant {message.messageId} a été envoyé avec succès."));
+                _logger.LogInformation($"Le message avec l'identifiant {dtoMessage.messageId} a été envoyé avec succès.");
+                return Ok(new ApiResponse<object>($"Le message avec l'identifiant {dtoMessage.messageId} a été envoyé avec succès."));
             }
             catch (Exception ex)
             {
@@ -92,7 +85,7 @@ namespace ApiLeapHit.Controllers
                 }
 
                 _logger.LogInformation($"Le message avec l'identifiant {id} a été reçu avec succès.");
-                return Ok(new ApiResponse<Message>("Message reçu avec succès.", message));
+                return Ok(new ApiResponse<DTOMessage>("Message reçu avec succès.", message.ToDto()));
             }
             catch (Exception ex)
             {
@@ -106,16 +99,18 @@ namespace ApiLeapHit.Controllers
         {
             try
             {
-                var message = await _dataManager.ReceiveAllMessages();
+                var messages = await _dataManager.ReceiveAllMessages();
 
-                if (message == null || message.Count() == 0)
+                if (messages == null || messages.Count() == 0)
                 {
                     _logger.LogWarning($"Aucun message n'a été trouvé.");
                     return NotFound(new ApiResponse<object>("Aucun message n'a pas été trouvé."));
                 }
 
+                var dtosMessages = messages.Select(message => message.ToDto()).ToList();
+
                 _logger.LogInformation($"Les messages ont été reçus avec succès.");
-                return Ok(new ApiResponse<List<Message>>("Messages reçus avec succès.", message));
+                return Ok(new ApiResponse<List<DTOMessage>>("Messages reçus avec succès.", dtosMessages));
             }
             catch (Exception ex)
             {
