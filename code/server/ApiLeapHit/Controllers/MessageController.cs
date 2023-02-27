@@ -4,6 +4,7 @@ using DTO;
 using DTO.Factory;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ApiLeapHit.Controllers
 {
@@ -80,18 +81,24 @@ namespace ApiLeapHit.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DTOMessage>> ReceiveMessage(int id)
         {
-            var message = await _dataManager.ReceiveMessage(id);
-            if (message == null)
+            try
             {
-                return NotFound();
+                var message = await _dataManager.ReceiveMessage(id);
+
+                if (message == null)
+                {
+                    _logger.LogWarning($"Message with id {id} not found.");
+                    return NotFound(new ApiResponse<object>("Le message n'a pas été trouvé."));
+                }
+
+                _logger.LogInformation($"Le message avec l'identifiant {id} a été reçu avec succès.");
+                return Ok(new ApiResponse<Message>("Message reçu avec succès.", message));
             }
-
-            var player = await _dataManager.GetPlayer(message.player);
-            var chat = await _dataManager.GetChat(message.chat);
-
-
-
-            return Ok(message);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Une erreur est survenue lors de la récupération du message avec l'id {id}.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse<object>("Une erreur est survenue lors de la récupération du message."));
+            }
         }
 
     }
