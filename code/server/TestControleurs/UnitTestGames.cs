@@ -7,6 +7,8 @@ using DTO.Factory;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -25,17 +27,18 @@ namespace TestControleurs
             ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
             var player = new Player { playerId = id, name = "Test Player", nbBallTouchTotal = 0, timePlayed = 3 };
             var controller = new PlayerController(dataManager, loggerFactory.CreateLogger<PlayerController>());
-            await controller.AddPlayer(player.ToDto());
-
+            var rep= await controller.AddPlayer(player.ToDto());
+            Console.WriteLine(rep.ToString());
             // Act
             var result = await controller.GetPlayer(id);
-            var objectResult = (ObjectResult)result.Result;
-            var apiResponse = JsonSerializer.Deserialize<ApiResponse<DTOPlayer>>(objectResult.Value);
+            var objectResult = (ObjectResult)(result.Result);
+            var apiResponse = result.Value;
 
             // Assert
             Assert.IsNotNull(apiResponse);
+
             Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
-            Assert.AreEqual(apiResponse.Data.playerId, id);
+            Assert.AreEqual(apiResponse.playerId, id);
         }
     }
 }
