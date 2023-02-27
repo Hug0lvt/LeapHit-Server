@@ -87,7 +87,7 @@ namespace ApiLeapHit.Controllers
 
                 if (message == null)
                 {
-                    _logger.LogWarning($"Message with id {id} not found.");
+                    _logger.LogWarning($"Aucun message avec l'idée {id} n'a été trouvé.");
                     return NotFound(new ApiResponse<object>("Le message n'a pas été trouvé."));
                 }
 
@@ -97,7 +97,30 @@ namespace ApiLeapHit.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Une erreur est survenue lors de la récupération du message avec l'id {id}.");
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse<object>("Une erreur est survenue lors de la récupération du message."));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse<object>($"Une erreur est survenue lors de la récupération du message. : {ex.Message}"));
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<DTOMessage>> ReceiveAllMessages()
+        {
+            try
+            {
+                var message = await _dataManager.ReceiveAllMessages();
+
+                if (message == null || message.Count() == 0)
+                {
+                    _logger.LogWarning($"Aucun message n'a été trouvé.");
+                    return NotFound(new ApiResponse<object>("Aucun message n'a pas été trouvé."));
+                }
+
+                _logger.LogInformation($"Les messages ont été reçus avec succès.");
+                return Ok(new ApiResponse<List<Message>>("Messages reçus avec succès.", message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Une erreur est survenue lors de la récupération des messages.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse<object>($"Une erreur est survenue lors de la récupération des messages. : {ex.Message}"));
             }
         }
 

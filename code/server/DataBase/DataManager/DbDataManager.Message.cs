@@ -44,7 +44,7 @@ namespace DataBase.DataManager
             }
         }
 
-        public Task<List<Message>> GetMessages()
+        public Task<List<Message>> ReceiveAllMessages()
         {
             using (var context = new PongDbContext())
             {
