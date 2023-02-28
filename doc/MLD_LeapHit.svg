@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="512" height="288" viewBox="0 0 512 288" xmlns="http://www.w3.org/2000/svg">
+<rect id="frame" x="0" y="0" width="512" height="288" fill="#fff" stroke="none" stroke-width="0"/>
+
+<!-- Entity MESSAGE -->
+<g class="page_0_vszgn7mY diagram_page" visibility="visible">
+	<g>
+		<rect x="239" y="9" width="78" height="25" fill="#f4a582" stroke="#f4a582" stroke-width="0" opacity="1"/>
+		<rect x="239" y="34" width="78" height="93" fill="#fddbc7" stroke="#fddbc7" stroke-width="0" opacity="1"/>
+		<rect x="239" y="9" width="78" height="118" fill="none" stroke="#d6604d" stroke-width="2" opacity="1"/>
+		<line x1="239" y1="34" x2="317" y2="34" stroke="#d6604d" stroke-width="1"/>
+	</g>
+	<text x="248" y="26.75" fill="#000" font-family="Verdana" font-size="12">MESSAGE</text>
+	<text x="244" y="51.8" fill="#000" font-family="Verdana" font-size="12">messageId</text>
+	<line x1="244" y1="54" x2="311" y2="54" stroke="#000" stroke-width="1"/>
+	<text x="244" y="68.8" fill="#000" font-family="Verdana" font-size="12">message</text>
+	<text x="244" y="85.8" fill="#000" font-family="Verdana" font-size="12">timestamp</text>
+	<text x="244" y="102.8" fill="#000" font-family="Verdana" font-size="12">#playerId</text>
+	<text x="244" y="119.8" fill="#000" font-family="Verdana" font-size="12">#idChat</text>
+</g>
+
+<!-- Entity GAME -->
+<g class="page_0_vszgn7mY diagram_page" visibility="visible">
+	<g>
+		<rect x="41" y="127" width="116" height="25" fill="#f4a582" stroke="#f4a582" stroke-width="0" opacity="1"/>
+		<rect x="41" y="152" width="116" height="127" fill="#fddbc7" stroke="#fddbc7" stroke-width="0" opacity="1"/>
+		<rect x="41" y="127" width="116" height="152" fill="none" stroke="#d6604d" stroke-width="2" opacity="1"/>
+		<line x1="41" y1="152" x2="157" y2="152" stroke="#d6604d" stroke-width="1"/>
+	</g>
+	<text x="81" y="144.75" fill="#000" font-family="Verdana" font-size="12">GAME</text>
+	<text x="46" y="169.8" fill="#000" font-family="Verdana" font-size="12">gameId</text>
+	<line x1="46" y1="172" x2="93" y2="172" stroke="#000" stroke-width="1"/>
+	<text x="46" y="186.8" fill="#000" font-family="Verdana" font-size="12">#playerWinner</text>
+	<text x="46" y="203.8" fill="#000" font-family="Verdana" font-size="12">#playerLoser</text>
+	<text x="46" y="220.8" fill="#000" font-family="Verdana" font-size="12">durationGame</text>
+	<text x="46" y="237.8" fill="#000" font-family="Verdana" font-size="12">nbMaxExchanges</text>
+	<text x="46" y="254.8" fill="#000" font-family="Verdana" font-size="12">scoreWinner</text>
+	<text x="46" y="271.8" fill="#000" font-family="Verdana" font-size="12">scoreLoser</text>
+</g>
+
+<!-- Entity PLAYER -->
+<g class="page_0_vszgn7mY diagram_page" visibility="visible">
+	<g>
+		<rect x="221" y="152" width="114" height="25" fill="#f4a582" stroke="#f4a582" stroke-width="0" opacity="1"/>
+		<rect x="221" y="177" width="114" height="77" fill="#fddbc7" stroke="#fddbc7" stroke-width="0" opacity="1"/>
+		<rect x="221" y="152" width="114" height="102" fill="none" stroke="#d6604d" stroke-width="2" opacity="1"/>
+		<line x1="221" y1="177" x2="335" y2="177" stroke="#d6604d" stroke-width="1"/>
+	</g>
+	<text x="255" y="169.75" fill="#000" font-family="Verdana" font-size="12">PLAYER</text>
+	<text x="226" y="194.8" fill="#000" font-family="Verdana" font-size="12">playerId</text>
+	<line x1="226" y1="197" x2="277" y2="197" stroke="#000" stroke-width="1"/>
+	<text x="226" y="211.8" fill="#000" font-family="Verdana" font-size="12">name</text>
+	<text x="226" y="228.8" fill="#000" font-family="Verdana" font-size="12">nbBallTouchTotal</text>
+	<text x="226" y="245.8" fill="#000" font-family="Verdana" font-size="12">timePlayed</text>
+</g>
+
+<!-- Entity CHAT -->
+<g class="page_0_vszgn7mY diagram_page" visibility="visible">
+	<g>
+		<rect x="399" y="161" width="72" height="25" fill="#f4a582" stroke="#f4a582" stroke-width="0" opacity="1"/>
+		<rect x="399" y="186" width="72" height="59" fill="#fddbc7" stroke="#fddbc7" stroke-width="0" opacity="1"/>
+		<rect x="399" y="161" width="72" height="84" fill="none" stroke="#d6604d" stroke-width="2" opacity="1"/>
+		<line x1="399" y1="186" x2="471" y2="186" stroke="#d6604d" stroke-width="1"/>
+	</g>
+	<text x="418" y="178.75" fill="#000" font-family="Verdana" font-size="12">CHAT</text>
+	<text x="404" y="203.8" fill="#000" font-family="Verdana" font-size="12">chatId</text>
+	<line x1="404" y1="206" x2="443" y2="206" stroke="#000" stroke-width="1"/>
+	<text x="404" y="220.8" fill="#000" font-family="Verdana" font-size="12">#playerId</text>
+	<text x="404" y="237.8" fill="#000" font-family="Verdana" font-size="12">#playerId</text>
+</g>
+
+<!-- Link from &quot;playerId&quot; (MESSAGE) to &quot;playerId&quot; (PLAYER) -->
+<path d="M239 98.5 C185 144.5 167 190.5 221 190.5" fill="none" stroke="#878787" stroke-width="2"/>
+<polygon points="221 190.5 209 196.5 213 190.5 209 184.5" fill="#878787" stroke-width="0"/>
+<circle cx="239" cy="98.5" r="2" stroke="#878787" stroke-width="2" fill="#878787"/>
+
+<!-- Link from &quot;chatId&quot; (MESSAGE) to &quot;chatId&quot; (CHAT) -->
+<path d="M317 115.5 C358 157.5 344.33 199.5 399 199.5" fill="none" stroke="#878787" stroke-width="2"/>
+<polygon points="399 199.5 387 205.5 391 199.5 387 193.5" fill="#878787" stroke-width="0"/>
+<circle cx="317" cy="115.5" r="2" stroke="#878787" stroke-width="2" fill="#878787"/>
+
+<!-- Link from &quot;playerId&quot; (GAME) to &quot;playerId&quot; (PLAYER) -->
+<path d="M157 182.5 C189 186.5 178.33 190.5 221 190.5" fill="none" stroke="#878787" stroke-width="2"/>
+<polygon points="221 190.5 209 196.5 213 190.5 209 184.5" fill="#878787" stroke-width="0"/>
+<circle cx="157" cy="182.5" r="2" stroke="#878787" stroke-width="2" fill="#878787"/>
+
+<!-- Link from &quot;playerId&quot; (GAME) to &quot;playerId&quot; (PLAYER) -->
+<path d="M157 199.5 C189 195 178.33 190.5 221 190.5" fill="none" stroke="#878787" stroke-width="2"/>
+<polygon points="221 190.5 209 196.5 213 190.5 209 184.5" fill="#878787" stroke-width="0"/>
+<circle cx="157" cy="199.5" r="2" stroke="#878787" stroke-width="2" fill="#878787"/>
+
+<!-- Link from &quot;playerId&quot; (CHAT) to &quot;playerId&quot; (PLAYER) -->
+<path d="M399 216.5 C367 203.5 377.67 190.5 335 190.5" fill="none" stroke="#878787" stroke-width="2"/>
+<polygon points="335 190.5 347 184.5 343 190.5 347 196.5" fill="#878787" stroke-width="0"/>
+<circle cx="399" cy="216.5" r="2" stroke="#878787" stroke-width="2" fill="#878787"/>
+
+<!-- Link from &quot;playerId&quot; (CHAT) to &quot;playerId&quot; (PLAYER) -->
+<path d="M399 233.5 C367 212 377.67 190.5 335 190.5" fill="none" stroke="#878787" stroke-width="2"/>
+<polygon points="335 190.5 347 184.5 343 190.5 347 196.5" fill="#878787" stroke-width="0"/>
+<circle cx="399" cy="233.5" r="2" stroke="#878787" stroke-width="2" fill="#878787"/>
+</svg>
