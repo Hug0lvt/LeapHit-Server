@@ -13,7 +13,9 @@ namespace ApiLeapHit.Mapper
                 durationGame = game.durationGame,
                 nbMaxEchanges = game.nbMaxEchanges,
                 playerWinner = game.winner,
-                playerLoser = game.loser
+                playerLoser = game.loser,
+                scoreLoser = game.loser,
+                scoreWinner = game.winner
             };
             return dtoGame;
         }
@@ -25,7 +27,9 @@ namespace ApiLeapHit.Mapper
                 durationGame = dtoGame.durationGame,
                 nbMaxEchanges = dtoGame.nbMaxEchanges,
                 winner = dtoGame.playerWinner,
-                loser = dtoGame.playerLoser
+                loser = dtoGame.playerLoser,
+                scoreLoser = dtoGame.scoreLoser,
+                scoreWinner = dtoGame.scoreWinner
             };
         }
     }

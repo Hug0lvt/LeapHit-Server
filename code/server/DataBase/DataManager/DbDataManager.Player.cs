@@ -17,7 +17,7 @@ namespace DataBase.DataManager
             using (var context = new PongDbContext())
             {
                 await context.Players.AddAsync(player);
-                await context.SaveChangesAsync();
+                context.SaveChangesAsync();
             }
         }
 
