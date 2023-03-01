@@ -12,7 +12,7 @@ COPY ["server/DataBase/DataBase.csproj", "DataBase/"]
 RUN dotnet restore "ApiLeapHit/ApiLeapHit.csproj"
 COPY . .
 WORKDIR "/app/api/ApiLeapHit"
-RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/build
+RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/api/build
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
