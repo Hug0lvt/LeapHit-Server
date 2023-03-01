@@ -12,7 +12,7 @@ COPY ["server/DataBase/DataBase.csproj", "DataBase/"]
 RUN dotnet restore "ApiLeapHit/ApiLeapHit.csproj"
 COPY . .
 WORKDIR "/app/api/ApiLeapHit"
-RUN dotnet build2 "ApiLeapHit.csproj" -c Release -o /app/api/build
+RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/api/build
 
 FROM build2 AS publish
 RUN dotnet publish "ApiLeapHit.csproj" -c Release -o /app/publish
