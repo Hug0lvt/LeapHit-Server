@@ -15,14 +15,14 @@ WORKDIR "/app/api/ApiLeapHit"
 RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/api/build
 
 FROM build2 AS publish
-RUN dotnet publish "ApiLeapHit.csproj" -c Release -o /app/publish
+RUN dotnet publish "ApiLeapHit.csproj" -c Release -o /app/api/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-COPY --from=build1 /app/server/build .
+COPY --from=build1 /app/server/out .
 COPY --from=publish /app/api/publish .
 
 ENTRYPOINT ["dotnet", "ApiLeapHit.dll"]
