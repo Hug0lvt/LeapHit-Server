@@ -9,9 +9,9 @@ WORKDIR /app/api
 COPY ["server/ApiLeapHit/ApiLeapHit.csproj", "ApiLeapHit/"]
 COPY ["server/DTO/DTO.csproj", "DTO/"]
 COPY ["server/DataBase/DataBase.csproj", "DataBase/"]
-RUN dotnet restore "server/ApiLeapHit/ApiLeapHit.csproj"
+RUN dotnet restore "ApiLeapHit/ApiLeapHit.csproj"
 COPY . .
-WORKDIR "/src/ApiLeapHit"
+WORKDIR "/app/api/ApiLeapHit"
 RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/build
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
