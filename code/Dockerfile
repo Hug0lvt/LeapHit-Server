@@ -1,32 +1,27 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-
-# Première étape de la construction
-WORKDIR /app/server
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build1
+WORKDIR /app
 RUN dotnet new console
 COPY server/Server/Program.cs Program.cs
 RUN dotnet publish -c Release -o out
 
-# Deuxième étape de la construction
-WORKDIR /app/api
-COPY server/ApiLeapHit/. .
-COPY server/DTO/DTO.csproj DTO/
-COPY server/DataBase/DataBase.csproj DataBase/
-RUN dotnet restore "ApiLeapHit.csproj"
+FROM mcr.microsoft.com/dotnet/runtime:6.0 AS build2
+WORKDIR /src
+COPY ["server/ApiLeapHit/ApiLeapHit.csproj", "ApiLeapHit/"]
+COPY ["server/DTO/DTO.csproj", "DTO/"]
+COPY ["server/DataBase/DataBase.csproj", "DataBase/"]
+RUN dotnet restore "server/ApiLeapHit/ApiLeapHit.csproj"
 COPY . .
-WORKDIR /app/api/ApiLeapHit
+WORKDIR "/src/ApiLeapHit"
 RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/build
-FROM build AS publish
-RUN dotnet publish "ApiLeapHit.csproj" -c Release -o /app/publish
 
-# Troisième étape de la construction
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-COPY --from=build /app/server/out .
-COPY --from=build /app/api/publish .
-
-# Configuration de l'application
 EXPOSE 80
 EXPOSE 443
-EXPOSE 3131
-ENTRYPOINT ["dotnet", "app.dll"]
+
+COPY --from=build2 /app/build .
+COPY --from=build2 /app/publish .
+
+ENTRYPOINT ["dotnet", "ApiLeapHit.dll"]
+
 
