@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataBase.Migrations
 {
     /// <inheritdoc />
-    public partial class mymigration : Migration
+    public partial class Migrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,7 +63,9 @@ namespace DataBase.Migrations
                     durationGame = table.Column<int>(type: "INTEGER", nullable: false),
                     nbMaxEchanges = table.Column<int>(type: "INTEGER", nullable: false),
                     winner = table.Column<int>(type: "INTEGER", nullable: false),
-                    loser = table.Column<int>(type: "INTEGER", nullable: false)
+                    loser = table.Column<int>(type: "INTEGER", nullable: false),
+                    scoreWinner = table.Column<int>(type: "INTEGER", nullable: false),
+                    scoreLoser = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -126,8 +128,8 @@ namespace DataBase.Migrations
 
             migrationBuilder.InsertData(
                 table: "Games",
-                columns: new[] { "gameId", "durationGame", "loser", "nbMaxEchanges", "winner" },
-                values: new object[] { 1, 65, 2, 5, 1 });
+                columns: new[] { "gameId", "durationGame", "loser", "nbMaxEchanges", "scoreLoser", "scoreWinner", "winner" },
+                values: new object[] { 1, 65, 2, 5, 2, 6, 1 });
 
             migrationBuilder.InsertData(
                 table: "Messages",

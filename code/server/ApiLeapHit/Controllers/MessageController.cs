@@ -84,6 +84,13 @@ namespace ApiLeapHit.Controllers
                     return NotFound(new ApiResponse<object>("Le message n'a pas été trouvé."));
                 }
 
+                var response = new ApiResponse<DTOMessage>("Joueur ajouté avec succès.");
+                response.Links.Add(new ApiLink(
+                    Url.Action("GetPlayer", "Player", new { id = player.playerId }),
+                    "self",
+                    "GET"
+                ));
+
                 _logger.LogInformation($"Le message avec l'identifiant {id} a été reçu avec succès.");
                 return Ok(new ApiResponse<DTOMessage>("Message reçu avec succès.", message.ToDto()));
             }

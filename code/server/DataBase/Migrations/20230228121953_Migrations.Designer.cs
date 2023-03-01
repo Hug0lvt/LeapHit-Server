@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(PongDbContextWithStub))]
-    [Migration("20230222115848_mymigration")]
-    partial class mymigration
+    [Migration("20230228121953_Migrations")]
+    partial class Migrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,6 +64,12 @@ namespace DataBase.Migrations
                     b.Property<int>("nbMaxEchanges")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("scoreLoser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("scoreWinner")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("winner")
                         .HasColumnType("INTEGER");
 
@@ -82,6 +88,8 @@ namespace DataBase.Migrations
                             durationGame = 65,
                             loser = 2,
                             nbMaxEchanges = 5,
+                            scoreLoser = 2,
+                            scoreWinner = 6,
                             winner = 1
                         });
                 });

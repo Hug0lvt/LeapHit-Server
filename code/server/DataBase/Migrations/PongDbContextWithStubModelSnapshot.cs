@@ -61,6 +61,12 @@ namespace DataBase.Migrations
                     b.Property<int>("nbMaxEchanges")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("scoreLoser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("scoreWinner")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("winner")
                         .HasColumnType("INTEGER");
 
@@ -79,6 +85,8 @@ namespace DataBase.Migrations
                             durationGame = 65,
                             loser = 2,
                             nbMaxEchanges = 5,
+                            scoreLoser = 2,
+                            scoreWinner = 6,
                             winner = 1
                         });
                 });

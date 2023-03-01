@@ -13,5 +13,7 @@ namespace DTO
         public int nbMaxEchanges { get; set; }
         public int playerWinner { get; set; }
         public int playerLoser { get; set; }
+        public int scoreWinner { get; set; }
+        public int scoreLoser { get; set; }
     }
 }
