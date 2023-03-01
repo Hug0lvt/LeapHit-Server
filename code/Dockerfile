@@ -1,6 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build1
 WORKDIR /app/server
-RUN dotnet new console
 COPY server/Server/Program.cs Program.cs
 RUN dotnet publish -c Release -o out
 
@@ -19,9 +18,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-COPY --from=build1 /app/server/build .
-COPY --from=build2 /app/api/publish .
+COPY --from=build1 /app/server/out .
+COPY --from=build2 /app/api/build .
 
 ENTRYPOINT ["dotnet", "ApiLeapHit.dll"]
-
-
