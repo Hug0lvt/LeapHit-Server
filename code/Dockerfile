@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build1
 WORKDIR /app/server
+RUN dotnet new console
 COPY server/Server/Program.cs Program.cs
 RUN dotnet publish -c Release -o out
 
@@ -11,14 +12,17 @@ COPY ["server/DataBase/DataBase.csproj", "DataBase/"]
 RUN dotnet restore "ApiLeapHit/ApiLeapHit.csproj"
 COPY . .
 WORKDIR "/app/api/ApiLeapHit"
-RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/api/build
+RUN dotnet build2 "ApiLeapHit.csproj" -c Release -o /app/api/build
+
+FROM build2 AS publish
+RUN dotnet publish "ApiLeapHit.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-COPY --from=build1 /app/server/out .
-COPY --from=build2 /app/api/build .
+COPY --from=build1 /app/server/build .
+COPY --from=publish /app/api/publish .
 
 ENTRYPOINT ["dotnet", "ApiLeapHit.dll"]
