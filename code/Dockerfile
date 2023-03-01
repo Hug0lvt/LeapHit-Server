@@ -4,7 +4,7 @@ RUN dotnet new console
 COPY server/Server/Program.cs Program.cs
 RUN dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/runtime:6.0 AS build2
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build2
 WORKDIR /app/api
 COPY ["server/ApiLeapHit/ApiLeapHit.csproj", "ApiLeapHit/"]
 COPY ["server/DTO/DTO.csproj", "DTO/"]
