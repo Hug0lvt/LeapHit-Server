@@ -1,28 +1,22 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build1
-WORKDIR /app/server
-RUN dotnet new console
-COPY server/Server/Program.cs Program.cs
-RUN dotnet publish -c Release -o out
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build2
-WORKDIR /app/api
-COPY ["server/ApiLeapHit/ApiLeapHit.csproj", "ApiLeapHit/"]
-COPY ["server/DTO/DTO.csproj", "DTO/"]
-COPY ["server/DataBase/DataBase.csproj", "DataBase/"]
-RUN dotnet restore "ApiLeapHit/ApiLeapHit.csproj"
-COPY . .
-WORKDIR "/app/api/ApiLeapHit"
-RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/api/build
-
-FROM build2 AS publish
-RUN dotnet publish "ApiLeapHit.csproj" -c Release -o /app/api/publish
-
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-COPY --from=build1 /app/server/out .
-COPY --from=publish /app/api/publish .
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["server/ApiLeapHit/ApiLeapHit.csproj", "ApiLeapHit/"]
+COPY ["server/DTO/DTO.csproj", "DTO/"]
+COPY ["server/DataBase/DataBase.csproj", "DataBase/"]
+RUN dotnet restore "ApiLeapHit/ApiLeapHit.csproj"
+COPY . .
+WORKDIR "/src/ApiLeapHit"
+RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/build
 
+FROM build AS publish
+RUN dotnet publish "ApiLeapHit.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ApiLeapHit.dll"]
