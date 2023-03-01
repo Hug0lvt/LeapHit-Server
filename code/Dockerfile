@@ -8,10 +8,10 @@ RUN dotnet publish -c Release -o out
 
 # Deuxième étape de la construction
 WORKDIR /app/api
-COPY ["ApiLeapHit/ApiLeapHit.csproj", "ApiLeapHit/"]
-COPY ["DTO/DTO.csproj", "DTO/"]
-COPY ["DataBase/DataBase.csproj", "DataBase/"]
-RUN dotnet restore "ApiLeapHit/ApiLeapHit.csproj"
+COPY server/ApiLeapHit/ApiLeapHit.csproj .
+COPY server/DTO/DTO.csproj DTO/
+COPY server/DataBase/DataBase.csproj DataBase/
+RUN dotnet restore "ApiLeapHit.csproj"
 COPY . .
 WORKDIR /app/api/ApiLeapHit
 RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/build
