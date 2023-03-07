@@ -10,7 +10,7 @@ steps:
     - name: build-docker-image
       image: plugins/docker
       settings:
-          dockerfile: code/Dockerfile
+          dockerfile: code/server/Dockerfile
           context: code/
           registry: hub.codefirst.iut.uca.fr
           repo: hub.codefirst.iut.uca.fr/leap-hit-team/leap-hit-server
