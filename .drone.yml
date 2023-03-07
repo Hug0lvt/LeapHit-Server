@@ -11,7 +11,7 @@ steps:
       image: plugins/docker
       settings:
           dockerfile: code/server/Dockerfile
-          context: code/
+          context: code/server
           registry: hub.codefirst.iut.uca.fr
           repo: hub.codefirst.iut.uca.fr/leap-hit-team/leap-hit-server
           username:
