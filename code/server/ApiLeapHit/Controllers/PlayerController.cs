@@ -62,7 +62,7 @@ namespace ApiLeapHit.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddPlayer([FromBody] DTOPlayer dtoPlayer)
+        public async Task<ActionResult<ApiResponse<object>>> AddPlayer([FromBody] DTOPlayer dtoPlayer)
         {
             try
             {
@@ -70,10 +70,12 @@ namespace ApiLeapHit.Controllers
 
                await _dataManager.AddPlayer(player);
 
+                var url = Url.Action("GetPlayer", "Player", new { id = 9 });
+
                 // Ajout des liens HATEOAS
-                var response = new ApiResponse<DTOPlayer>("Joueur ajouté avec succès.");
+                var response = new ApiResponse<object>("Joueur ajouté avec succès.");
                 response.Links.Add(new ApiLink(
-                    Url.Action("GetPlayer", "Player", new { id = player.playerId }),
+                    href: url,
                     "self",
                     "GET"
                 ));
@@ -104,35 +106,35 @@ namespace ApiLeapHit.Controllers
                 var response = new ApiResponse<IEnumerable<DTOPlayer>>($"La récupération des players a réussi. Nombre de players : {dtoPlayers.Count}", dtoPlayers);
 
                 // Ajout des liens HATEOAS
-                //response.Links.Add(new ApiLink(
-                //    Url.Action("GetPlayers", "Player"),
-                //    "self",
-                //    "GET"
-                //));
-                //response.Links.Add(new ApiLink(
-                //    Url.Action("AddPlayer", "Player"),
-                //    "create",
-                //    "POST"
-                //));
+                response.Links.Add(new ApiLink(
+                    Url.Action("GetPlayers", "Player"),
+                    "self",
+                    "GET"
+                ));
+                response.Links.Add(new ApiLink(
+                    Url.Action("AddPlayer", "Player"),
+                    "create",
+                    "POST"
+                ));
 
-                //foreach (var player in dtoPlayers)
-                //{
-                //    response.Links.Add(new ApiLink(
-                //        Url.Action("GetPlayer", "Player", new { id = player.playerId }),
-                //        "get_player",
-                //        "GET"
-                //    ));
-                //    response.Links.Add(new ApiLink(
-                //        Url.Action("RemovePlayer", "Player", new { id = player.playerId }),
-                //        "delete_player",
-                //        "DELETE"
-                //    ));
-                //    response.Links.Add(new ApiLink(
-                //        Url.Action("Put", "Player", new { id = player.playerId }),
-                //        "update_player",
-                //        "PUT"
-                //    ));
-                //}
+                foreach (var player in dtoPlayers)
+                {
+                    response.Links.Add(new ApiLink(
+                        Url.Action("GetPlayer", "Player", new { id = player.playerId }),
+                        "get_player",
+                        "GET"
+                    ));
+                    response.Links.Add(new ApiLink(
+                        Url.Action("RemovePlayer", "Player", new { id = player.playerId }),
+                        "delete_player",
+                        "DELETE"
+                    ));
+                    response.Links.Add(new ApiLink(
+                        Url.Action("Put", "Player", new { id = player.playerId }),
+                        "update_player",
+                        "PUT"
+                    ));
+                }
 
                 return Ok(response);
             }

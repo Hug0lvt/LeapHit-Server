@@ -11,8 +11,7 @@ namespace DTO.Factory
     {
         public string Message { get; set; }
         public T Data { get; set; }
-        public List<ApiLink> Links { get;  set; }
-        private List<ApiLink> links = new();
+        public List<ApiLink> Links { get; set; } = new List<ApiLink>();
 
 
         public ApiResponse(string message, T data = default)
