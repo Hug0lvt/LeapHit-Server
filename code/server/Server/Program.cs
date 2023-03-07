@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Collections.Generic;
 
 
 class Program
 {
 
     static int playerCount = 0;
+    static List<IPEndPoint> clientAddresses = new List<IPEndPoint>(); // Liste des adresses IP des clients connectés
     static void Main(string[] args)
     {
         Console.WriteLine("Welcome to LeapHit Multiplayer - Server");
@@ -26,13 +28,21 @@ class Program
             byte[] data = server.Receive(ref clientEndPoint);
             string dataReceived = System.Text.Encoding.ASCII.GetString(data);
             Console.WriteLine("Data received from client: " + dataReceived + " from " + clientEndPoint.ToString());
-         
-            playerCount++;
 
-            if (playerCount == 2)
+            if (!clientAddresses.Contains(clientEndPoint)) // Vérification si l'adresse IP est déjà présente dans la liste
             {
-                Console.WriteLine("Deux joueurs connectés, le jeu va commencer...");
-                // On va mettre le code du pour demarrer le match ici
+                clientAddresses.Add(clientEndPoint); // Ajout de l'adresse IP à la liste
+                playerCount++;
+
+                if (playerCount == 2)
+                {
+                    Console.WriteLine("Deux joueurs connectés, le jeu va commencer...");
+                    // On va mettre le code du pour demarrer le match ici
+                }
+            }
+            else
+            {
+                Console.WriteLine("Client with IP " + clientEndPoint.Address.ToString() + " has already sent a message and will not be counted.");
             }
 
         }
