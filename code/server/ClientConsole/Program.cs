@@ -1,32 +1,43 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-
-
+using System.Text;
 
 class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Welcome to Pong Multiplayer - Client");
+        Console.WriteLine("Welcome to LeapHit Multiplayer - Client");
         StartClient();
     }
 
     static void StartClient()
     {
-        IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3131);
-
-        //IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("82.165.19.245"), 3131);
-        //IPEndPoint endPoint = new IPEndPoint(Dns.GetHostAddresses("leaphit.hulivet.fr").FirstOrDefault(), 3131);
+        IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3131);
         UdpClient client = new UdpClient();
-        Console.WriteLine("Client connected to server: " + endPoint.ToString());
 
-        while (true)
+        // Send connection message to server
+        string connectionMessage = "Connect";
+        byte[] connectionData = Encoding.ASCII.GetBytes(connectionMessage);
+        client.Send(connectionData, connectionData.Length, serverEndPoint);
+
+        // Receive connection message from server
+        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        byte[] receivedData = client.Receive(ref remoteEndPoint);
+        string receivedMessage = Encoding.ASCII.GetString(receivedData);
+        Console.WriteLine("Received message: " + receivedMessage);
+
+        // Send data to server
+        string message = "";
+        while (message != "exit")
         {
-            Console.WriteLine("Enter data to send to server:");
-            string data = Console.ReadLine();
-            byte[] dataToSend = System.Text.Encoding.ASCII.GetBytes(data);
-            client.Send(dataToSend, dataToSend.Length, endPoint);
+            Console.Write("Enter message to send (or 'exit' to quit): ");
+            message = Console.ReadLine();
+            byte[] data = Encoding.ASCII.GetBytes(message);
+            client.Send(data, data.Length, serverEndPoint);
         }
+
+        // Close client
+        client.Close();
     }
 }
