@@ -35,6 +35,7 @@ class Program
                 // Assign a unique port to the client
                 IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort++); ;
                 UdpClient clientSocket = new UdpClient(clientEndPoint);
+                clientSocket.Client.Bind(clientEndPoint);
                 clients[remoteEndPoint] = clientSocket;
 
                 // Send connection message to client
