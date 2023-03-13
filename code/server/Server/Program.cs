@@ -35,7 +35,6 @@ class Program
                 // Assign a unique port to the client
                 IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort++); ;
                 UdpClient clientSocket = new UdpClient(clientEndPoint);
-                clientSocket.Client.Bind(clientEndPoint);
                 clients[remoteEndPoint] = clientSocket;
 
                 // Send connection message to client
@@ -46,6 +45,7 @@ class Program
                 // Start thread to receive data from client
                 Thread receiveThread = new Thread(ReceiveMessages);
                 receiveThread.Start(clientSocket);
+                
             }
         }
     }
@@ -58,8 +58,12 @@ class Program
         while (true)
         {
             byte[] receivedData = clientSocket.Receive(ref remoteEndPoint);
+            Console.WriteLine("PORRA");
             string receivedMessage = Encoding.ASCII.GetString(receivedData);
+            Console.WriteLine("PORRA2");
             Console.WriteLine("Received from " + remoteEndPoint.ToString() + ": " + receivedMessage);
+            Console.WriteLine("PORRA3");
+
         }
     }
 }
