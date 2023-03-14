@@ -24,13 +24,15 @@ class Program
         // Receive connection message from server
         IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
         byte[] receivedData = client.Receive(ref remoteEndPoint);
-        string receivedMessage = Encoding.ASCII.GetString(receivedData);
-        Console.WriteLine("Received message: " + receivedMessage);
+        string receivedPort = Encoding.ASCII.GetString(receivedData);
+        Console.WriteLine("Received port: " + receivedPort);
 
         // Send data to server
         string message = "";
         while (message != "exit")
         {
+            serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), int.Parse(receivedPort));
+
             Console.Write("Enter message to send (or 'exit' to quit): ");
             message = Console.ReadLine();
             byte[] data = Encoding.ASCII.GetBytes(message);

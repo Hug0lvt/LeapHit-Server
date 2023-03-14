@@ -38,31 +38,27 @@ class Program
                 clients[remoteEndPoint] = clientSocket;
 
                 // Send connection message to client
-                string connectionMessage = "Connection established on port " + clientEndPoint.Port.ToString();
+                string connectionMessage = clientEndPoint.Port.ToString();
                 byte[] connectionData = Encoding.ASCII.GetBytes(connectionMessage);
                 serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
 
                 // Start thread to receive data from client
-                Thread receiveThread = new Thread(ReceiveMessages);
-                receiveThread.Start(clientSocket);
+                Thread receiveThread = new Thread(()=>ReceiveMessages(clientSocket));
+                receiveThread.Start();
                 
             }
         }
     }
 
-    static void ReceiveMessages(object obj)
+    static void ReceiveMessages(UdpClient clientSocket)
     {
-        UdpClient clientSocket = (UdpClient)obj;
         IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
         while (true)
         {
             byte[] receivedData = clientSocket.Receive(ref remoteEndPoint);
-            Console.WriteLine("PORRA");
             string receivedMessage = Encoding.ASCII.GetString(receivedData);
-            Console.WriteLine("PORRA2");
             Console.WriteLine("Received from " + remoteEndPoint.ToString() + ": " + receivedMessage);
-            Console.WriteLine("PORRA3");
 
         }
     }
