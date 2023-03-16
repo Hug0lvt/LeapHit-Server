@@ -11,13 +11,13 @@ namespace ApiLeapHit.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MessageController : Controller
+    public class MessagesController : Controller
     {
 
         private readonly DbDataManager _dataManager;
-        private readonly ILogger<MessageController> _logger;
+        private readonly ILogger<MessagesController> _logger;
 
-        public MessageController(DbDataManager dataManager, ILogger<MessageController> logger)
+        public MessagesController(DbDataManager dataManager, ILogger<MessagesController> logger)
         {
             _dataManager = dataManager;
             _logger = logger;
@@ -31,19 +31,22 @@ namespace ApiLeapHit.Controllers
                 var player = await _dataManager.GetPlayer(dtoMessage.PlayerId);
                 if (player == null)
                 {
-                    _logger.LogWarning($"Le joueur avec l'identifiant {dtoMessage.PlayerId} n'existe pas.");
-                    return NotFound(new ApiResponse<object>($"Le joueur avec l'identifiant {dtoMessage.PlayerId} n'existe pas."));
+                    var message = $"Le joueur avec l'identifiant {dtoMessage.PlayerId} n'existe pas.";
+                    _logger.LogWarning(message);
+                    return StatusCode((int)HttpStatusCode.NotFound, new ApiResponse(message));
                 }
 
                 await _dataManager.SendMessage(dtoMessage.ToMessage());
 
-                _logger.LogInformation($"Le message avec l'identifiant {dtoMessage.messageId} a été envoyé avec succès.");
-                return Ok(new ApiResponse<object>($"Le message avec l'identifiant {dtoMessage.messageId} a été envoyé avec succès."));
+                var message_success = $"Le message avec l'identifiant {dtoMessage.messageId} a été envoyé avec succès.";
+                _logger.LogInformation(message_success);
+                return StatusCode((int)HttpStatusCode.Created, new ApiResponse(message_success));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Une erreur est survenue lors de l'envoi du message : {ex.Message}");
-                return StatusCode(500, new ApiResponse<object>($"Une erreur est survenue lors de l'envoi du message : {ex.Message}"));
+                var erroe_message = "Une erreur est survenue lors de l'envoi du message.";
+                _logger.LogError(ex,erroe_message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse(erroe_message));
             }
         }
 
@@ -55,19 +58,22 @@ namespace ApiLeapHit.Controllers
                 var result = await _dataManager.RemoveMessage(id);
                 if (result)
                 {
-                    _logger.LogInformation($"Le message avec l'identifiant {id} a été supprimé avec succès.");
-                    return Ok(new ApiResponse<object>($"Le message avec l'identifiant {id} a été supprimé avec succès."));
+                    var message_success = $"Le message avec l'identifiant {id} a été supprimé avec succès.";
+                    _logger.LogInformation(message_success);
+                    return StatusCode((int)HttpStatusCode.OK, new ApiResponse(message_success));
                 }
                 else
                 {
-                    _logger.LogWarning($"Le message avec l'identifiant {id} n'existe pas.");
-                    return NotFound(new ApiResponse<object>($"Le message avec l'identifiant {id} n'existe pas."));
+                    var message = $"Le message avec l'identifiant {id} n'existe pas.";
+                    _logger.LogInformation(message);
+                    return StatusCode((int)HttpStatusCode.BadRequest, new ApiResponse(message));
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Une erreur est survenue lors de la suppression du message avec l'identifiant {id} : {ex.Message}");
-                return StatusCode(500, new ApiResponse<object>($"Une erreur est survenue lors de la suppression du message avec l'identifiant {id} : {ex.Message}"));
+                var error_message = $"Une erreur est survenue lors de la suppression du message avec l'identifiant {id}.";
+                _logger.LogError(ex, error_message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse(error_message));
             }
         }
 
@@ -80,51 +86,47 @@ namespace ApiLeapHit.Controllers
 
                 if (message == null)
                 {
-                    _logger.LogWarning($"Aucun message avec l'idée {id} n'a été trouvé.");
-                    return NotFound(new ApiResponse<object>("Le message n'a pas été trouvé."));
+                    var message_notFound = $"Aucun message avec l'idée {id} n'a été trouvé.";
+                    _logger.LogInformation(message_notFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, new ApiResponse(message_notFound));
                 }
 
-                var response = new ApiResponse<DTOMessage>("Joueur ajouté avec succès.");
-                //response.Links.Add(new ApiLink(
-                //    Url.Action("GetPlayer", "Player", new { id = player.playerId }),
-                //    "self",
-                //    "GET"
-                //));
-
-                _logger.LogInformation($"Le message avec l'identifiant {id} a été reçu avec succès.");
-                return Ok(new ApiResponse<DTOMessage>("Message reçu avec succès.", message.ToDto()));
+                var message_success = $"Le message avec l'identifiant {id} a été reçu avec succès.";
+                _logger.LogInformation(message_success);
+                return StatusCode((int)HttpStatusCode.OK, new ApiResponse<DTOMessage>(message_success, message.ToDto()));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Une erreur est survenue lors de la récupération du message avec l'id {id}.");
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse<object>($"Une erreur est survenue lors de la récupération du message. : {ex.Message}"));
+                var message_error = $"Une erreur est survenue lors de la récupération du message avec l'id {id}.";
+                _logger.LogError(ex, message_error);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse(message_error));
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult<DTOMessage>> ReceiveAllMessages()
-        {
-            try
-            {
-                var messages = await _dataManager.ReceiveAllMessages();
+        //[HttpGet]
+        //public async Task<ActionResult<DTOMessage>> ReceiveAllMessages()
+        //{
+        //    try
+        //    {
+        //        var messages = await _dataManager.ReceiveAllMessages();
 
-                if (messages == null || messages.Count() == 0)
-                {
-                    _logger.LogWarning($"Aucun message n'a été trouvé.");
-                    return NotFound(new ApiResponse<object>("Aucun message n'a pas été trouvé."));
-                }
+        //        if (messages == null || messages.Count() == 0)
+        //        {
+        //            _logger.LogWarning($"Aucun message n'a été trouvé.");
+        //            return NotFound(new ApiResponse("Aucun message n'a pas été trouvé."));
+        //        }
 
-                var dtosMessages = messages.Select(message => message.ToDto()).ToList();
+        //        var dtosMessages = messages.Select(message => message.ToDto()).ToList();
 
-                _logger.LogInformation($"Les messages ont été reçus avec succès.");
-                return Ok(new ApiResponse<List<DTOMessage>>("Messages reçus avec succès.", dtosMessages));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Une erreur est survenue lors de la récupération des messages.");
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse<object>($"Une erreur est survenue lors de la récupération des messages. : {ex.Message}"));
-            }
-        }
+        //        _logger.LogInformation($"Les messages ont été reçus avec succès.");
+        //        return Ok(new ApiResponse<List<DTOMessage>>("Messages reçus avec succès.", dtosMessages));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, $"Une erreur est survenue lors de la récupération des messages.");
+        //        return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse($"Une erreur est survenue lors de la récupération des messages. : {ex.Message}"));
+        //    }
+        //}
 
     }
 }
