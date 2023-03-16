@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(PongDbContextWithStub))]
-    [Migration("20230228121953_Migrations")]
-    partial class Migrations
+    [Migration("20230316092529_mymigrations")]
+    partial class mymigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,11 +26,13 @@ namespace DataBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("player1")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("player1")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("player2")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("player2")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("chatId");
 
@@ -44,8 +46,8 @@ namespace DataBase.Migrations
                         new
                         {
                             chatId = 1,
-                            player1 = 1,
-                            player2 = 2
+                            player1 = "test",
+                            player2 = "test2"
                         });
                 });
 
@@ -58,8 +60,9 @@ namespace DataBase.Migrations
                     b.Property<int>("durationGame")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("loser")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("loser")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("nbMaxEchanges")
                         .HasColumnType("INTEGER");
@@ -70,8 +73,9 @@ namespace DataBase.Migrations
                     b.Property<int>("scoreWinner")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("winner")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("winner")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("gameId");
 
@@ -86,11 +90,11 @@ namespace DataBase.Migrations
                         {
                             gameId = 1,
                             durationGame = 65,
-                            loser = 2,
+                            loser = "test2",
                             nbMaxEchanges = 5,
                             scoreLoser = 2,
                             scoreWinner = 6,
-                            winner = 1
+                            winner = "test"
                         });
                 });
 
@@ -107,8 +111,9 @@ namespace DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("player")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("player")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("timestamp")
                         .HasColumnType("TEXT");
@@ -127,7 +132,7 @@ namespace DataBase.Migrations
                             messageId = 1,
                             chat = 1,
                             message = "Salut mon gars !",
-                            player = 1,
+                            player = "test",
                             timestamp = new DateTime(2023, 2, 16, 17, 5, 12, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -135,16 +140,15 @@ namespace DataBase.Migrations
                             messageId = 2,
                             chat = 1,
                             message = "Comment tu vas ?",
-                            player = 2,
+                            player = "test2",
                             timestamp = new DateTime(2023, 2, 16, 17, 12, 35, 0, DateTimeKind.Unspecified)
                         });
                 });
 
             modelBuilder.Entity("DataBase.Entity.Player", b =>
                 {
-                    b.Property<int>("playerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("playerId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -163,14 +167,14 @@ namespace DataBase.Migrations
                     b.HasData(
                         new
                         {
-                            playerId = 1,
+                            playerId = "test",
                             name = "Rami",
                             nbBallTouchTotal = 20,
                             timePlayed = 120
                         },
                         new
                         {
-                            playerId = 2,
+                            playerId = "test2",
                             name = "Hugo",
                             nbBallTouchTotal = 90,
                             timePlayed = 250

@@ -19,7 +19,7 @@ namespace DataBase.Context
 
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite($"Data Source=C:\\Users\\noanr\\source\\repos\\leap-hit-server\\code\\server\\DataBase\\PongDB.db");
+                optionsBuilder.UseSqlite("Data Source=../DataBase/PongDB.db");
             }
         }
     }
