@@ -24,6 +24,7 @@ namespace DataBase.Context
                 //optionsBuilder.UseNpgsql(@"host=localhost;database=postgres;user id=postgres;password=1234;");
                 string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..\\..\\..\\DataBase\\PongDB.db");
                 optionsBuilder.UseSqlite($"Data Source={path}");
+
             }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
