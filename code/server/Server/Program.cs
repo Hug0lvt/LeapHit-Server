@@ -4,6 +4,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using DataBase.Entity;
+using Shared.DTO;
+using System.Text.Json;
 
 class Program
 {
@@ -26,9 +29,11 @@ class Program
         {
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
             byte[] receivedData = serverSocket.Receive(ref remoteEndPoint);
-            string message = Encoding.ASCII.GetString(receivedData);
+            string fileJson = Encoding.UTF8.GetString(receivedData);
+            ObjectTransfert<Player> data = JsonSerializer.Deserialize<ObjectTransfert<Player>>(fileJson);
 
-            if (message == "Connect")
+
+            if (data.Informations.Action == Shared.DTO.Action.Connect)
             {
                 Console.WriteLine("New connection from " + remoteEndPoint.ToString());
 
