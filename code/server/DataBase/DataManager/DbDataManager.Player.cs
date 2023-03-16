@@ -21,7 +21,7 @@ namespace DataBase.DataManager
             }
         }
 
-        public async Task<bool> RemovePlayer(int id)
+        public async Task<bool> RemovePlayer(string id)
         {
             using (var context = new PongDbContext())
             {
@@ -36,7 +36,7 @@ namespace DataBase.DataManager
             }
         }
 
-        public async Task<Player> UpdatePlayer(int id, string newName)
+        public async Task<Player> UpdatePlayer(string id, string newName)
         {
             using (var context = new PongDbContext())
             {
@@ -50,7 +50,7 @@ namespace DataBase.DataManager
             }
         }
 
-        public Task<Player> GetPlayer(int id) 
+        public Task<Player> GetPlayer(string id) 
         {
             using (var context = new PongDbContext())
             {
@@ -65,6 +65,15 @@ namespace DataBase.DataManager
             {
                 var players = context.Players.ToList();
                 return Task.FromResult(players);
+            }
+        }
+
+        public Task<int> GetNbPlayers()
+        {
+            using (var context = new PongDbContext())
+            {
+                var nbplayers = context.Players.ToList().Count();
+                return Task.FromResult(nbplayers);
             }
         }
     }

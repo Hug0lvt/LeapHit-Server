@@ -23,7 +23,7 @@ namespace ApiLeapHit.Mapper
             {
                 playerId = dtoPlayer.playerId,
                 name = dtoPlayer.name,
-                nbBallTouchTotal = dtoPlayer.nbBallTouchTotal,
+                nbBallTouchTotal = dtoPlayer.nbBallTouchTotal,  
                 timePlayed = dtoPlayer.timePlayed
             };
         }

@@ -9,8 +9,8 @@ namespace DataBase.Entity
         public int gameId { get; set; }
         public int durationGame { get; set; }
         public int nbMaxEchanges { get; set; }
-        public int winner { get; set; }
-        public int loser { get; set; }
+        public string winner { get; set; }
+        public string loser { get; set; }
 
         public int scoreWinner { get; set; }
 

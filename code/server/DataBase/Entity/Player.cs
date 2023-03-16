@@ -5,7 +5,7 @@ namespace DataBase.Entity
 {
     public class Player
     {
-        public int playerId { get; set; }
+        public string playerId { get; set; }
         public string name { get; set; }
         public int nbBallTouchTotal { get; set; }
         public int timePlayed { get; set; }
