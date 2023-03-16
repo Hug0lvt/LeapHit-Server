@@ -108,7 +108,7 @@ namespace ApiLeapHit.Controllers
 
 
         [HttpGet("Player/{id}")]
-        public async Task<ActionResult<List<DTOChat>>> GetChatsByIdPlayer(int id)
+        public async Task<ActionResult<List<DTOChat>>> GetChatsByIdPlayer(string id)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace ApiLeapHit.Controllers
         }
 
         [HttpGet("Players/{idPlayer1}/{idPlayer2}")]
-        public async Task<ActionResult<List<DTOChat>>> GetChatsByIdPlayers(int idPlayer1, int idPlayer2)
+        public async Task<ActionResult<List<DTOChat>>> GetChatsByIdPlayers(string idPlayer1, string idPlayer2)
         {
             try
             {

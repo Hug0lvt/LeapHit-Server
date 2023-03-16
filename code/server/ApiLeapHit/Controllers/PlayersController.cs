@@ -22,11 +22,15 @@ namespace ApiLeapHit.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<ApiResponse<string>>> CreatePlayer()
+        [HttpGet("/clePlayer/{idIdentification}")]
+        public async Task<ActionResult<ApiResponse<string>>> CreatePlayer(string idIdentification)
         {
             try
             {
+                if(!idIdentification.Equals("K02q7naLzjmodzAFfoSO4mPydr7W5hydPMrHtA6D"))
+                {
+                    return StatusCode((int)HttpStatusCode.NotFound, new ApiResponse("Le numéo n'est pas correct."));
+                }
                 var player = new Player();
                 string id;
                 do

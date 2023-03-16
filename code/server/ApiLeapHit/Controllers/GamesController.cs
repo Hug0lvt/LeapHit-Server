@@ -95,7 +95,7 @@ namespace ApiLeapHit.Controllers
         //}
 
         [HttpGet("Player/{id}")]
-        public async Task<ActionResult<IEnumerable<DTOGame>>> GetGameByIdPlayer(int id)
+        public async Task<ActionResult<IEnumerable<DTOGame>>> GetGameByIdPlayer(string id)
         {
             try
             {
