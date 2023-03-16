@@ -1,5 +1,7 @@
 ﻿using DataBase.Entity;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace DataBase.Context
 {
@@ -19,7 +21,8 @@ namespace DataBase.Context
 
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("Data Source=../DataBase/PongDB.db");
+                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..\\..\\..\\DataBase\\PongDB.db");
+                optionsBuilder.UseSqlite($"Data Source={path}");
             }
         }
     }
