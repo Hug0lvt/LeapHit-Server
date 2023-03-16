@@ -102,6 +102,7 @@ namespace ApiLeapHit.Controllers
                 var games = await _dataManager.GetGameById(id);
 
                 if (games == null || games.Count == 0)
+
                 {
                     var message = $"Aucune game trouvée pour le joueur avec l'id {id}.";
                     _logger.LogInformation(message);

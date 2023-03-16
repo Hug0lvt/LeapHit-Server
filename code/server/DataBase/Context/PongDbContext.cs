@@ -25,5 +25,13 @@ namespace DataBase.Context
                 optionsBuilder.UseSqlite($"Data Source={path}");
             }
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Player>().ToTable("Players");
+            modelBuilder.Entity<Game>().ToTable("Games");
+            modelBuilder.Entity<Message>().ToTable("Messages");
+            modelBuilder.Entity<Chat>().ToTable("Chats");
+
+        }
     }
 }
