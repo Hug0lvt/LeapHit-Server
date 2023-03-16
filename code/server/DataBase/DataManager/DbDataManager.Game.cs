@@ -43,7 +43,7 @@ namespace DataBase.DataManager
             }
         }
 
-        public Task<List<Game>> GetGameById(int id)
+        public Task<List<Game>> GetGameById(string id)
         {
             using (var context = new PongDbContext())
             {

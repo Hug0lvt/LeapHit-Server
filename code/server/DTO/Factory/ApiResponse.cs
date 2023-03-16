@@ -20,4 +20,16 @@ namespace DTO.Factory
             Data = data;
         }
     }
+    public class ApiResponse
+    {
+        public string Message { get; set; }
+        public List<ApiLink> Links { get; set; } = new List<ApiLink>();
+
+
+        public ApiResponse(string message)
+        {
+            Message = message;
+        }
+    }
+
 }
