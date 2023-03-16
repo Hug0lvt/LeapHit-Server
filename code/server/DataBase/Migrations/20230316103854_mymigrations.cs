@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace DataBase.Migrations
 {
     /// <inheritdoc />
@@ -109,34 +107,6 @@ namespace DataBase.Migrations
                         principalTable: "Players",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Players",
-                columns: new[] { "playerId", "name", "nbBallTouchTotal", "timePlayed" },
-                values: new object[,]
-                {
-                    { "test", "Rami", 20, 120 },
-                    { "test2", "Hugo", 90, 250 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Chats",
-                columns: new[] { "chatId", "player1", "player2" },
-                values: new object[] { 1, "test", "test2" });
-
-            migrationBuilder.InsertData(
-                table: "Games",
-                columns: new[] { "gameId", "durationGame", "loser", "nbMaxEchanges", "scoreLoser", "scoreWinner", "winner" },
-                values: new object[] { 1, 65, "test2", 5, 2, 6, "test" });
-
-            migrationBuilder.InsertData(
-                table: "Messages",
-                columns: new[] { "messageId", "chat", "message", "player", "timestamp" },
-                values: new object[,]
-                {
-                    { 1, 1, "Salut mon gars !", "test", new DateTime(2023, 2, 16, 17, 5, 12, 0, DateTimeKind.Unspecified) },
-                    { 2, 1, "Comment tu vas ?", "test2", new DateTime(2023, 2, 16, 17, 12, 35, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.CreateIndex(

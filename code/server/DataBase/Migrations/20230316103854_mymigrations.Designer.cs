@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataBase.Migrations
 {
-    [DbContext(typeof(PongDbContextWithStub))]
-    [Migration("20230316092529_mymigrations")]
+    [DbContext(typeof(PongDbContext))]
+    [Migration("20230316103854_mymigrations")]
     partial class mymigrations
     {
         /// <inheritdoc />
@@ -40,15 +40,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("player2");
 
-                    b.ToTable("Chats");
-
-                    b.HasData(
-                        new
-                        {
-                            chatId = 1,
-                            player1 = "test",
-                            player2 = "test2"
-                        });
+                    b.ToTable("Chats", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.Game", b =>
@@ -83,19 +75,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("winner");
 
-                    b.ToTable("Games");
-
-                    b.HasData(
-                        new
-                        {
-                            gameId = 1,
-                            durationGame = 65,
-                            loser = "test2",
-                            nbMaxEchanges = 5,
-                            scoreLoser = 2,
-                            scoreWinner = 6,
-                            winner = "test"
-                        });
+                    b.ToTable("Games", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.Message", b =>
@@ -124,25 +104,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("player");
 
-                    b.ToTable("Messages");
-
-                    b.HasData(
-                        new
-                        {
-                            messageId = 1,
-                            chat = 1,
-                            message = "Salut mon gars !",
-                            player = "test",
-                            timestamp = new DateTime(2023, 2, 16, 17, 5, 12, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            messageId = 2,
-                            chat = 1,
-                            message = "Comment tu vas ?",
-                            player = "test2",
-                            timestamp = new DateTime(2023, 2, 16, 17, 12, 35, 0, DateTimeKind.Unspecified)
-                        });
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.Player", b =>
@@ -162,23 +124,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("playerId");
 
-                    b.ToTable("Players");
-
-                    b.HasData(
-                        new
-                        {
-                            playerId = "test",
-                            name = "Rami",
-                            nbBallTouchTotal = 20,
-                            timePlayed = 120
-                        },
-                        new
-                        {
-                            playerId = "test2",
-                            name = "Hugo",
-                            nbBallTouchTotal = 90,
-                            timePlayed = 250
-                        });
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("DataBase.Entity.Chat", b =>
