@@ -10,12 +10,12 @@ namespace Server
     public class Room
     {
 
-        public Room(int id)
+        public Room(string id)
         {
             ID = id;
         }
 
-        public int ID { get; set; }
+        public string ID { get; set; }
 
         public Player playerHost;
         public Player playerJoin;

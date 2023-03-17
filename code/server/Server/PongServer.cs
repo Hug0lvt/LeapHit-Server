@@ -40,7 +40,7 @@ public class PongServer
 
             if (data.Informations.Action == Shared.DTO.Action.Create)
             {
-                Room room = new Room(data.Data.playerID);
+                Room room = new Room(data.Data.playerId);
                 room.playerHost = data.Data;
                 room.nbPlayer++;
                 Console.WriteLine("New connection from " + remoteEndPoint.ToString());
