@@ -11,10 +11,6 @@ using Server;
 
 class Program
 {
-    //sert juste à stocker les connexions pour l'instant
-    static Dictionary<IPEndPoint, UdpClient> clients = new Dictionary<IPEndPoint, UdpClient>();
-    static int nextPort = 3132;
-
     static void Main(string[] args)
     {
         PongServer server = new PongServer();
