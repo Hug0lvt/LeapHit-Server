@@ -9,7 +9,18 @@ namespace Server
 {
     public class Room
     {
-        public ICollection<Player> MaxPlayers { get; set; }
+
+        public Room(int id)
+        {
+            ID = id;
+        }
+
+        public int ID { get; set; }
+
+        public Player playerHost;
+        public Player playerJoin;
+
+        public int nbPlayer = 0;
         public int Port { get; set; }
     }
 }

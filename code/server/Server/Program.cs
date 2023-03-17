@@ -17,65 +17,9 @@ class Program
 
     static void Main(string[] args)
     {
+        PongServer server = new PongServer();
         Console.WriteLine("Welcome to LeapHit Multiplayer - Server");
-        StartServer();
+        server.StartServer();
     }
 
-    static void StartServer()
-    {
-        Room room = new Room();
-        IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, 3131);
-        UdpClient serverSocket = new UdpClient(serverEndPoint);
-        Console.WriteLine("Server started, waiting for clients to connect...");
-
-        while (true)
-        {
-            IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-            byte[] receivedData = serverSocket.Receive(ref remoteEndPoint);
-            string fileJson = Encoding.UTF8.GetString(receivedData);
-            ObjectTransfert<Player> data = JsonSerializer.Deserialize<ObjectTransfert<Player>>(fileJson);
-            room.MaxPlayers.Add(data.Data);
-
-
-
-            if (data.Informations.Action == Shared.DTO.Action.Connect)
-            {
-                Console.WriteLine("New connection from " + remoteEndPoint.ToString());
-
-                // Assign a unique port to the client
-                IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort++);
-                UdpClient clientSocket = new UdpClient(clientEndPoint);
-                clients[remoteEndPoint] = clientSocket;
-
-                // Send connection message to client
-                string connectionMessage = clientEndPoint.Port.ToString();
-                byte[] connectionData = Encoding.ASCII.GetBytes(connectionMessage);
-                serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
-
-                // Start thread to receive data from client
-                Thread receiveThread = new Thread(()=>ReceiveMessages(clientSocket));
-                receiveThread.Start();
-
-                if (room.MaxPlayers.Count == 2)
-                {
-                    Console.WriteLine("Starting game...");
-                    // Call a function to start the game
-                }
-
-            }
-        }
-    }
-
-    static void ReceiveMessages(UdpClient clientSocket)
-    {
-        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-
-        while (true)
-        {
-            byte[] receivedData = clientSocket.Receive(ref remoteEndPoint);
-            string receivedMessage = Encoding.ASCII.GetString(receivedData);
-            Console.WriteLine("Received from " + remoteEndPoint.ToString() + ": " + receivedMessage);
-
-        }
-    }
 }
