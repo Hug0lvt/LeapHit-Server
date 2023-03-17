@@ -11,7 +11,7 @@ namespace DTO
         public int gameId { get; set; }
         public int durationGame { get; set; }
         public int nbMaxEchanges { get; set; }
-        public int playerWinner { get; set; }
-        public int playerLoser { get; set; }
+        public string playerWinner { get; set; }
+        public string playerLoser { get; set; }
     }
 }

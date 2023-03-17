@@ -14,8 +14,8 @@ namespace ApiLeapHit.Mapper
                 nbMaxEchanges = game.nbMaxEchanges,
                 playerWinner = game.winner,
                 playerLoser = game.loser,
-                scoreLoser = game.loser,
-                scoreWinner = game.winner
+                scoreLoser = game.scoreLoser,
+                scoreWinner = game.scoreWinner
             };
             return dtoGame;
         }

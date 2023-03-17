@@ -6,8 +6,8 @@ namespace DataBase.Entity
     public class Chat
     {
         public int chatId { get; set; }
-        public int player1 { get; set; }
-        public int player2 { get; set; }
+        public string player1 { get; set; }
+        public string player2 { get; set; }
 
         [ForeignKey("player1")]
         public Player PlayerId1 { get; set; }

@@ -52,5 +52,14 @@ namespace DataBase.DataManager
                 return Task.FromResult(messages);
             }
         }
+
+        public Task<int> GetNbMessages()
+        {
+            using (var context = new PongDbContext())
+            {
+                var nbmessages = context.Messages.ToList().Count();
+                return Task.FromResult(nbmessages);
+            }
+        }
     }
 }

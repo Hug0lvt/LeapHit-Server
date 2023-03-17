@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace DataBase.Migrations
 {
     /// <inheritdoc />
-    public partial class Migrations : Migration
+    public partial class mymigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,8 +15,7 @@ namespace DataBase.Migrations
                 name: "Players",
                 columns: table => new
                 {
-                    playerId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    playerId = table.Column<string>(type: "TEXT", nullable: false),
                     name = table.Column<string>(type: "TEXT", nullable: false),
                     nbBallTouchTotal = table.Column<int>(type: "INTEGER", nullable: false),
                     timePlayed = table.Column<int>(type: "INTEGER", nullable: false)
@@ -34,8 +31,8 @@ namespace DataBase.Migrations
                 {
                     chatId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    player1 = table.Column<int>(type: "INTEGER", nullable: false),
-                    player2 = table.Column<int>(type: "INTEGER", nullable: false)
+                    player1 = table.Column<string>(type: "TEXT", nullable: false),
+                    player2 = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,8 +59,8 @@ namespace DataBase.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     durationGame = table.Column<int>(type: "INTEGER", nullable: false),
                     nbMaxEchanges = table.Column<int>(type: "INTEGER", nullable: false),
-                    winner = table.Column<int>(type: "INTEGER", nullable: false),
-                    loser = table.Column<int>(type: "INTEGER", nullable: false),
+                    winner = table.Column<string>(type: "TEXT", nullable: false),
+                    loser = table.Column<string>(type: "TEXT", nullable: false),
                     scoreWinner = table.Column<int>(type: "INTEGER", nullable: false),
                     scoreLoser = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -92,7 +89,7 @@ namespace DataBase.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     message = table.Column<string>(type: "TEXT", nullable: false),
                     timestamp = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    player = table.Column<int>(type: "INTEGER", nullable: false),
+                    player = table.Column<string>(type: "TEXT", nullable: false),
                     chat = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -110,34 +107,6 @@ namespace DataBase.Migrations
                         principalTable: "Players",
                         principalColumn: "playerId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Players",
-                columns: new[] { "playerId", "name", "nbBallTouchTotal", "timePlayed" },
-                values: new object[,]
-                {
-                    { 1, "Rami", 20, 120 },
-                    { 2, "Hugo", 90, 250 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Chats",
-                columns: new[] { "chatId", "player1", "player2" },
-                values: new object[] { 1, 1, 2 });
-
-            migrationBuilder.InsertData(
-                table: "Games",
-                columns: new[] { "gameId", "durationGame", "loser", "nbMaxEchanges", "scoreLoser", "scoreWinner", "winner" },
-                values: new object[] { 1, 65, 2, 5, 2, 6, 1 });
-
-            migrationBuilder.InsertData(
-                table: "Messages",
-                columns: new[] { "messageId", "chat", "message", "player", "timestamp" },
-                values: new object[,]
-                {
-                    { 1, 1, "Salut mon gars !", 1, new DateTime(2023, 2, 16, 17, 5, 12, 0, DateTimeKind.Unspecified) },
-                    { 2, 1, "Comment tu vas ?", 2, new DateTime(2023, 2, 16, 17, 12, 35, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.CreateIndex(

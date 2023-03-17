@@ -8,7 +8,8 @@ namespace DTO
 {
     public class DTOPlayer
     {
-        public int playerId { get; set; }
+        public string playerId { get; set; }
+        // public string playerIdUniq { get; set; }
         public string name { get; set; }
         public int nbBallTouchTotal { get; set; }
         public int timePlayed { get; set; }

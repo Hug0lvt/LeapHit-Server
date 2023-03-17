@@ -21,16 +21,23 @@ namespace DataBase.DataManager
 
         public async Task<bool> RemoveChat(int id)
         {
-            using (var context = new PongDbContext())
+            try
             {
-                var chat = context.Chats.Where(c => c.chatId == id).ToList().FirstOrDefault();
-                if (chat != null)
+                using (var context = new PongDbContext())
                 {
-                    var result = context.Chats.Remove(chat);
-                    await context.SaveChangesAsync();
-                    return result != null;
+                    var chat = context.Chats.Where(c => c.chatId == id).ToList().FirstOrDefault();
+                    if (chat != null)
+                    {
+                        var result = context.Chats.Remove(chat);
+                        await context.SaveChangesAsync();
+                        return result != null;
+                    }
+                    return false;
                 }
-                return false;
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
 
@@ -51,7 +58,7 @@ namespace DataBase.DataManager
             }
         }
 
-        public Task<List<Chat>> GetChatsByIdPlayer(int id)
+        public Task<List<Chat>> GetChatsByIdPlayer(string id)
         {
             using (var context = new PongDbContext())
             {
@@ -60,7 +67,7 @@ namespace DataBase.DataManager
             }
         }
 
-        public Task<List<Chat>> GetChatsByIdPlayers(int idPlayer1, int idPlayer2)
+        public Task<List<Chat>> GetChatsByIdPlayers(string idPlayer1, string idPlayer2)
         {
             using (var context = new PongDbContext())
             {
@@ -69,5 +76,13 @@ namespace DataBase.DataManager
             }
         }
 
+        public Task<int> GetNbChats()
+        {
+            using (var context = new PongDbContext())
+            {
+                var nbchats = context.Chats.ToList().Count();
+                return Task.FromResult(nbchats);
+            }
+        }
     }
 }

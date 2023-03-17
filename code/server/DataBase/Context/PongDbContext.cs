@@ -1,5 +1,7 @@
 ﻿using DataBase.Entity;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace DataBase.Context
 {
@@ -19,8 +21,19 @@ namespace DataBase.Context
 
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite($"Data Source=C:\\Users\\noanr\\source\\repos\\leap-hit-server\\code\\server\\DataBase\\PongDB.db");
+                //optionsBuilder.UseNpgsql(@"host=localhost;database=postgres;user id=postgres;password=1234;");
+                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..\\..\\..\\DataBase\\PongDB.db");
+                optionsBuilder.UseSqlite($"Data Source={path}");
+
             }
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Player>().ToTable("Players");
+            modelBuilder.Entity<Game>().ToTable("Games");
+            modelBuilder.Entity<Message>().ToTable("Messages");
+            modelBuilder.Entity<Chat>().ToTable("Chats");
+
         }
     }
 }
