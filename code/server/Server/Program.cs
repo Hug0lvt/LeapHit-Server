@@ -7,9 +7,11 @@ using System.Threading;
 using DataBase.Entity;
 using Shared.DTO;
 using System.Text.Json;
+using Server;
 
 class Program
 {
+    //sert juste à stocker les connexions pour l'instant
     static Dictionary<IPEndPoint, UdpClient> clients = new Dictionary<IPEndPoint, UdpClient>();
     static int nextPort = 3132;
 
@@ -21,6 +23,7 @@ class Program
 
     static void StartServer()
     {
+        Room room = new Room();
         IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, 3131);
         UdpClient serverSocket = new UdpClient(serverEndPoint);
         Console.WriteLine("Server started, waiting for clients to connect...");
@@ -31,6 +34,8 @@ class Program
             byte[] receivedData = serverSocket.Receive(ref remoteEndPoint);
             string fileJson = Encoding.UTF8.GetString(receivedData);
             ObjectTransfert<Player> data = JsonSerializer.Deserialize<ObjectTransfert<Player>>(fileJson);
+            room.MaxPlayers.Add(data.Data);
+
 
 
             if (data.Informations.Action == Shared.DTO.Action.Connect)
@@ -38,7 +43,7 @@ class Program
                 Console.WriteLine("New connection from " + remoteEndPoint.ToString());
 
                 // Assign a unique port to the client
-                IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort++); ;
+                IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort++);
                 UdpClient clientSocket = new UdpClient(clientEndPoint);
                 clients[remoteEndPoint] = clientSocket;
 
@@ -50,7 +55,13 @@ class Program
                 // Start thread to receive data from client
                 Thread receiveThread = new Thread(()=>ReceiveMessages(clientSocket));
                 receiveThread.Start();
-                
+
+                if (room.MaxPlayers.Count == 2)
+                {
+                    Console.WriteLine("Starting game...");
+                    // Call a function to start the game
+                }
+
             }
         }
     }
