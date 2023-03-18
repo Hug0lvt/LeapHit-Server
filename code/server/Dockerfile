@@ -1,6 +1,4 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -14,6 +12,7 @@ RUN dotnet restore "ApiLeapHit/ApiLeapHit.csproj"
 COPY . .
 WORKDIR "/src/ApiLeapHit"
 RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/build
+RUN rm -rf /root/.nuget/packages/*
 
 FROM build AS publish
 RUN dotnet publish "ApiLeapHit.csproj" -c Release -o /app/publish
