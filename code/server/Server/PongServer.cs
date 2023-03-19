@@ -40,7 +40,7 @@ public class PongServer
 
             if (data.Informations.Action == Shared.DTO.Action.Create)
             {
-                Room room = new Room(data.Data.playerID);
+                Room room = new Room(data.Data.playerId);
                 room.playerHost = data.Data;
                 room.nbPlayer++;
                 Console.WriteLine("New connection from " + remoteEndPoint.ToString());
@@ -52,13 +52,12 @@ public class PongServer
                 UdpClient clientSocket = new UdpClient(clientEndPoint);
                 clients[remoteEndPoint] = clientSocket;
 
-                // Send connection message to client
-                string connectionMessage = room.ID;
-                byte[] connectionData = Encoding.ASCII.GetBytes(connectionMessage);
+                // Send connection message to client             
+                byte[] connectionData = Encoding.ASCII.GetBytes(room.Id);
                 serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
 
                 // Start thread to receive data from client
-                Thread receiveThread = new Thread(() => ReceiveMessages(clientSocket));
+                Thread receiveThread = new Thread(() => Room.ReceiveMessages(clientSocket, data.Data));
                 receiveThread.Start();
 
             }
@@ -91,15 +90,5 @@ public class PongServer
         }
     }
 
-    static void ReceiveMessages(UdpClient clientSocket)
-    {
-        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-
-        while (true)
-        {
-            byte[] receivedData = clientSocket.Receive(ref remoteEndPoint);
-            string receivedMessage = Encoding.ASCII.GetString(receivedData);
-            Console.WriteLine("Received from " + remoteEndPoint.ToString() + ": " + receivedMessage);
-        }
-    }
+    
 }
