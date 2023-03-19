@@ -8,6 +8,8 @@ namespace Shared.DTO
 {
     public enum Action
     {
+        Create,
+        Join,
         Start,
         Connect,
         End

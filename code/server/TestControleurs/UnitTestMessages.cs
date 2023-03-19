@@ -28,7 +28,7 @@ namespace TestControleurs
             // Arrange
             var controller = new MessagesController(_dataManager, _logger);
             var nb = _dataManager.GetNbMessages();
-            var testMessage = new Message { messageId = nb.Result+1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), player = 1 , chat =1};
+            var testMessage = new Message { messageId = nb.Result+1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), player = "1" , chat =1};
             await _dataManager.SendMessage(testMessage);
 
             // Act
@@ -78,7 +78,7 @@ namespace TestControleurs
             // Arrange
             var controller = new MessagesController(_dataManager, _logger);
             var nb = _dataManager.GetNbMessages();
-            var testMessage = new Message { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), player = 1, chat = 1 };
+            var testMessage = new Message { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), player = "1", chat = 1 };
 
             // Act
             var result = await controller.RemoveMessage(nb.Result + 1);
@@ -95,7 +95,7 @@ namespace TestControleurs
             // Arrange
             var controller = new MessagesController(_dataManager, _logger);
             var nb = _dataManager.GetNbMessages();
-            var testMessage = new DTOMessage { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), PlayerId = 1, ChatId = 1 };
+            var testMessage = new DTOMessage { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), PlayerId = "1", ChatId = 1 };
 
             // Act
             var result = await controller.SendMessage(testMessage);
@@ -114,7 +114,7 @@ namespace TestControleurs
             var controller = new MessagesController(_dataManager, _logger);
             var nb = _dataManager.GetNbMessages();
             var nbP = _dataManager.GetNbPlayers();
-            var testMessage = new DTOMessage { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), PlayerId = nb.Result+1, ChatId = 1 };
+            var testMessage = new DTOMessage { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), PlayerId = (nb.Result+1).ToString(), ChatId = 1 };
 
             // Act
             var result = await controller.SendMessage(testMessage);

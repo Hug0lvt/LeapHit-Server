@@ -27,8 +27,8 @@ namespace TestControleurs
         public async Task AddChat_ReturnsOkResult_WhenChatIsAdded()
         {
             // Arrange
-            var player1 = new Player { playerId = 1, name = "Player1" };
-            var player2 = new Player { playerId = 2, name = "Player2" };
+            var player1 = new Player { playerId = "1", name = "Player1" };
+            var player2 = new Player { playerId = "2", name = "Player2" };
             var dtoChat = new DTOChat { PlayerId1 = player1.playerId, PlayerId2 = player2.playerId };
             var controller = new ChatsController(_dataManager, _logger);
 
@@ -46,7 +46,7 @@ namespace TestControleurs
         {
             // Arrange
             var nb = await _dataManager.GetNbChats();
-            var dtoChat = new DTOChat { PlayerId1 = 1, PlayerId2 = nb+10 };
+            var dtoChat = new DTOChat { PlayerId1 = "1", PlayerId2 = (nb + 10).ToString() };
             var controller = new ChatsController(_dataManager, _logger);
 
             // Act
@@ -96,7 +96,7 @@ namespace TestControleurs
         public async Task GetChatById_ReturnsOkResult()
         {
             // Arrange
-            var chat = new Chat { chatId = 1, player1 = 1, player2 = 2 };
+            var chat = new Chat { chatId = 1, player1 = "1", player2 = "2" };
             var controller = new ChatsController(_dataManager, _logger);
 
             // Act
@@ -132,7 +132,7 @@ namespace TestControleurs
         {
             // Arrange
             var nb = await _dataManager.GetNbChats();
-            var chat = new Chat { chatId = nb+1, player1 = 1, player2 = 2 };
+            var chat = new Chat { chatId = nb+1, player1 = "1", player2 = "2" };
             await _dataManager.AddChat(chat);
             var controller = new ChatsController(_dataManager, _logger);
 

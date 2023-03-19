@@ -28,7 +28,7 @@ namespace TestControleurs
             // Arrange
             var controller = new GamesController(_dataManager, _logger);
             var nb = _dataManager.GetNbGames();
-            var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = 1, winner = 2, nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 };
+            var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = "1", winner = "2", nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 };
             await _dataManager.AddGame(testGame);
 
             // Act
@@ -78,7 +78,7 @@ namespace TestControleurs
             // Arrange
             var controller = new GamesController(_dataManager, _logger);
             var nb = _dataManager.GetNbGames();
-            var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = 1, winner = 2, nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 }; 
+            var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = "1", winner = "2", nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 }; 
             await _dataManager.AddGame(testGame);
 
             // Act
@@ -97,11 +97,11 @@ namespace TestControleurs
             var controller = new GamesController(_dataManager, _logger);
             var nb = _dataManager.GetNbGames();
             var nbP = _dataManager.GetNbPlayers();
-            var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = nbP.Result, winner = 2, nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 };
+            var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = nbP.Result.ToString(), winner = "2", nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 };
             await _dataManager.AddGame(testGame);
 
             // Act
-            var result = await controller.GetGameByIdPlayer(nbP.Result);
+            var result = await controller.GetGameByIdPlayer(nbP.Result.ToString());
             var objectResult = (ObjectResult)result.Result;
 
             // Assert
@@ -117,7 +117,7 @@ namespace TestControleurs
             var nb = _dataManager.GetNbPlayers();
 
             // Act
-            var result = await controller.GetGameByIdPlayer(nb.Result + 1);
+            var result = await controller.GetGameByIdPlayer((nb.Result + 1).ToString());
             var objectResult = (ObjectResult)result.Result;
 
             // Assert

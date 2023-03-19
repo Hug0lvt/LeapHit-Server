@@ -40,7 +40,7 @@ public class PongServer
 
             if (data.Informations.Action == Shared.DTO.Action.Create)
             {
-                Room room = new Room(data.Data.playerID);
+                Room room = new Room(data.Data.playerId);
                 room.playerHost = data.Data;
                 room.nbPlayer++;
                 Console.WriteLine("New connection from " + remoteEndPoint.ToString());
@@ -83,11 +83,11 @@ public class PongServer
 
             }
 
-            if (room.MaxPlayers.Count == 2)
+            /*if (room.MaxPlayers.Count == 2)
             {
                 Console.WriteLine("Starting game...");
                 // Call a function to start the game
-            }
+            }*/
         }
     }
 
