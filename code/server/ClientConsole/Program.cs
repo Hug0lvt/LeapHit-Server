@@ -13,7 +13,7 @@ class Program
 
     static void StartClient()
     {
-        IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3131);
+        IPEndPoint serverEndPoint = new IPEndPoint(Dns.GetHostAddresses("hulivet.fr").FirstOrDefault(), 3131);
         UdpClient client = new UdpClient();
 
         // Send connection message to server
@@ -31,7 +31,7 @@ class Program
         string message = "";
         while (message != "exit")
         {
-            serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), int.Parse(receivedPort));
+            serverEndPoint = new IPEndPoint(Dns.GetHostAddresses("hulivet.fr").FirstOrDefault(), int.Parse(receivedPort));
 
             Console.Write("Enter message to send (or 'exit' to quit): ");
             message = Console.ReadLine();
