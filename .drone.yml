@@ -47,4 +47,5 @@ steps:
            from_secret: db_user
          CODEFIRST_CLIENTDRONE_ENV_MARIADB_PASSWORD:
            from_secret: db_password
-         ADMINS: noanrandon,hugolivet,ramikhedair,lorisperret
+         ADMINS: noanrandon,hugolivet,ramikhedair,lorisperret,brunoda_costa_cunha
+     depends_on: [ build-docker-image ]
