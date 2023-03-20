@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DataBase.Migrations
+namespace ApiLeapHit.Migrations
 {
     /// <inheritdoc />
-    public partial class mymigrations : Migration
+    public partial class myFirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

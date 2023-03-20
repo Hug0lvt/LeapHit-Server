@@ -1,33 +1,33 @@
-﻿using DataBase.Entity;
+﻿using DataBase.Context;
+using DataBase.Entity;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Reflection;
 
-namespace DataBase.Context
+namespace ApiLeapHit
 {
-    public class PongDbContext : DbContext
+    public class DeployPongDbContext : DbContext
     {
+
         public DbSet<Player> Players { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Chat> Chats { get; set; }
 
-        public PongDbContext() { }
-        public PongDbContext(DbContextOptions<PongDbContext> options) : base(options) { }
+        public DeployPongDbContext(DbContextOptions<DeployPongDbContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //base.OnConfiguring(optionsBuilder);
-
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseNpgsql(@"host=localhost;database=postgres;user id=postgres;password=1234;");
-                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..\\..\\..\\DataBase\\PongDB.db");
-                //optionsBuilder.UseSqlite($"Data Source={path}");
-                optionsBuilder.UseSqlite($"Data Source=PongDB.db");
+                var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
 
+                var connectionString = configuration.GetConnectionString("AppDb");
+                optionsBuilder.UseSqlite(connectionString);
             }
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Player>().ToTable("Players");
