@@ -28,7 +28,8 @@ namespace DataBase.Context
                 var dbUser = Environment.GetEnvironmentVariable("DB_USER", EnvironmentVariableTarget.Process);
                 var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD", EnvironmentVariableTarget.Process);
                 var dbServer = Environment.GetEnvironmentVariable("DB_SERVER", EnvironmentVariableTarget.Process);
-                optionsBuilder.UseMySql("server=dbServer;port=3306;user=dbUser;password=pwd;database=dbDatabase", new MySqlServerVersion(new Version(10, 11, 1)));
+                optionsBuilder.UseMySql($"server={dbServer};port=3306;user={dbUser};password={dbPassword};database={dbDatabase}", new MySqlServerVersion(new Version(10, 11, 1)));
+
 
             }
         }
