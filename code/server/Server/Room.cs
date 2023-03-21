@@ -26,8 +26,8 @@ namespace Server
 
         public string Id { get; set; }
 
-        public Player playerHost;
-        public Player playerJoin;
+        public KeyValuePair <Player, UdpClient> playerHost;
+        public KeyValuePair <Player, UdpClient> playerJoin;
         public int Port { get; set; }
 
 
@@ -54,25 +54,49 @@ namespace Server
 
 
 
-        public void ReceiveMessages(UdpClient clientSocket,Player player)
+        public void ReceiveMessages(UdpClient clientSocket1, UdpClient clientSocket2)
         {
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
             while (true)
             {
-                byte[] receivedData = clientSocket.Receive(ref remoteEndPoint);
+                byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
+
                 string receivedMessage = Encoding.ASCII.GetString(receivedData);
                 Console.WriteLine("Received from " + remoteEndPoint.ToString() + ": " + receivedMessage);
-                
-                while (true) //score 
-                {
-                     //cordinate paddel
-                     receivedData = clientSocket.Receive(ref remoteEndPoint);
-                     receivedMessage = Encoding.ASCII.GetString(receivedData);
-                     
-                }
+
+
+                clientSocket2.Send(receivedData, receivedData.Length, remoteEndPoint);
 
             }
+        }
+
+        public void OnReadyChanged(object sender, PropertyChangedEventArgs e)
+        {
+
+            Room nbPlayer = sender as Room;
+            bool maxPlayer = nbPlayer.maxPlayer;
+
+            IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, Port);
+            UdpClient serverSocket = new UdpClient(serverEndPoint);
+
+            if (maxPlayer)
+            {
+
+                Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value));
+
+
+                Thread receiveThread2 = new Thread(() => ReceiveMessages(playerJoin.Value, playerHost.Value));
+
+                receiveThread1.Start();
+                receiveThread2.Start();
+
+                receiveThread1.Join();
+                receiveThread2.Join();
+
+                
+            }
+
         }
 
     }
