@@ -38,7 +38,7 @@ public class PongServer
             byte[] receivedData = serverSocket.Receive(ref remoteEndPoint);
             string fileJson = Encoding.UTF8.GetString(receivedData);
             ObjectTransfert<Player> data = JsonSerializer.Deserialize<ObjectTransfert<Player>>(fileJson);
-
+            
             if (data.Informations.Action == Shared.DTO.Action.Host)
             {
                 Host(data, remoteEndPoint, serverSocket, false);
