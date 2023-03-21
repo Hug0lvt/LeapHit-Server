@@ -24,7 +24,11 @@ namespace DataBase.Context
                 //optionsBuilder.UseNpgsql(@"host=localhost;database=postgres;user id=postgres;password=1234;");
                 //string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..\\..\\..\\DataBase\\PongDB.db");
                 //optionsBuilder.UseSqlite($"Data Source={path}");
-                optionsBuilder.UseMySql("server=localhost;port=3306;user=user;password=pwd;database=mydb", new MySqlServerVersion(new Version(10, 11, 1)));
+                var dbDatabase = Environment.GetEnvironmentVariable("DB_DATABASE", EnvironmentVariableTarget.Process);
+                var dbUser = Environment.GetEnvironmentVariable("DB_USER", EnvironmentVariableTarget.Process);
+                var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD", EnvironmentVariableTarget.Process);
+                var dbServer = Environment.GetEnvironmentVariable("DB_SERVER", EnvironmentVariableTarget.Process);
+                optionsBuilder.UseMySql("server=dbServer;port=3306;user=dbUser;password=pwd;database=dbDatabase", new MySqlServerVersion(new Version(10, 11, 1)));
 
             }
         }
