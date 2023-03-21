@@ -12,7 +12,6 @@ RUN dotnet restore "ApiLeapHit/ApiLeapHit.csproj"
 COPY . .
 WORKDIR "/src/ApiLeapHit"
 RUN dotnet build "ApiLeapHit.csproj" -c Release -o /app/build
-RUN rm -rf /root/.nuget/packages/*
 
 FROM build AS publish
 RUN dotnet publish "ApiLeapHit.csproj" -c Release -o /app/publish
