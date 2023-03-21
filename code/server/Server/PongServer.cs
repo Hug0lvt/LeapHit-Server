@@ -76,71 +76,50 @@ public class PongServer
     private void Host(ObjectTransfert<Player> data, IPEndPoint remoteEndPoint, UdpClient serverSocket, bool availaible)
     {
         Room room = new Room(data.Data.playerId, availaible);
-        room.playerHost = data.Data;
-        room.nbPlayer++;
 
-        room.PropertyChanged += OnReadyChanged;
-
-        Console.WriteLine("New connection from " + remoteEndPoint.ToString());
 
         // Assign a unique port to the client
         IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort);
+        UdpClient clientSocket = new UdpClient(clientEndPoint);
+
+        room.playerHost = new KeyValuePair<Player,UdpClient>(data.Data,clientSocket);
+        room.nbPlayer++;
+
+        room.PropertyChanged += room.OnReadyChanged;
+
+        Console.WriteLine("New connection Host From " + remoteEndPoint.ToString());
+
+       
         room.Port = nextPort;
         nextPort++;
-        UdpClient clientSocket = new UdpClient(clientEndPoint);
+        
         clients[remoteEndPoint] = clientSocket;
 
         // Send connection message to client             
         byte[] connectionData = Encoding.ASCII.GetBytes(room.Id);
         serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
 
-        // Start thread to receive data from client
-        Thread receiveThread = new Thread(() => room.ReceiveMessages(clientSocket, data.Data));
-        receiveThread.Start();
     }
 
     private void Join(ObjectTransfert<Player> data, IPEndPoint remoteEndPoint, UdpClient serverSocket, Room room)
     {
 
-        Console.WriteLine("New connection from " + remoteEndPoint.ToString());
 
         // Assign a unique port to the client
-        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort++);
+        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort);
         UdpClient clientSocket = new UdpClient(clientEndPoint);
-        clients[remoteEndPoint] = clientSocket;
 
-        // Send connection message to client
-        string connectionMessage = clientEndPoint.Port.ToString();
-        byte[] connectionData = Encoding.ASCII.GetBytes(connectionMessage);
-        serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
+        room.playerJoin = new KeyValuePair<Player, UdpClient>(data.Data, clientSocket);
+        room.nbPlayer++;
 
-        // Start thread to receive data from client
-        Thread receiveThread = new Thread(() => room.ReceiveMessages(clientSocket, data.Data));
-        receiveThread.Start();
+        room.PropertyChanged += room.OnReadyChanged;
+
+        Console.WriteLine("New connection Client from " + remoteEndPoint.ToString());
+
+        room.Port = nextPort;
+        nextPort++;
+
+
     }
-
-    private void OnReadyChanged(object sender, PropertyChangedEventArgs e)
-    {
-       
-        Room nbPlayer = sender as Room;
-        bool maxPlayer = nbPlayer.maxPlayer;
-
-        IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, listenPort);
-        UdpClient serverSocket = new UdpClient(serverEndPoint);
-
-        if (maxPlayer)
-        {
-            while (true)
-            {
-                //Faut finir ça mnt
-                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                byte[] receivedData = serverSocket.Receive(ref remoteEndPoint);
-
-
-            }
-        }
-        
-    }
-
 
 }
