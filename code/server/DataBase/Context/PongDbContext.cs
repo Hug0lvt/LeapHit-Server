@@ -17,13 +17,14 @@ namespace DataBase.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //base.OnConfiguring(optionsBuilder);
+            base.OnConfiguring(optionsBuilder);
 
             if (!optionsBuilder.IsConfigured)
             {
                 //optionsBuilder.UseNpgsql(@"host=localhost;database=postgres;user id=postgres;password=1234;");
-                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..\\..\\..\\DataBase\\PongDB.db");
-                optionsBuilder.UseSqlite($"Data Source={path}");
+                //string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..\\..\\..\\DataBase\\PongDB.db");
+                //optionsBuilder.UseSqlite($"Data Source={path}");
+                optionsBuilder.UseMySql("server=localhost;port=3306;user=user;password=pwd;database=mydb", new MySqlServerVersion(new Version(10, 11, 1)));
 
             }
         }
