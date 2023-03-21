@@ -58,6 +58,7 @@ public class PongServer
             if (data.Informations.Action == Shared.DTO.Action.Connect) // Join = rejoindre un room , et Host ça va juste créer un room
             {
                 var choisenRoom = rooms.FirstOrDefault(room => room.Value.Availaible);
+                Console.WriteLine("Connection " + choisenRoom.Key);
                 if (choisenRoom.Value != default )
                 {
                     Join(data, remoteEndPoint, serverSocket, choisenRoom.Value);
@@ -85,19 +86,22 @@ public class PongServer
         room.playerHost = new KeyValuePair<Player,UdpClient>(data.Data,clientSocket);
         room.nbPlayer++;
 
-        room.PropertyChanged += room.OnReadyChanged;
+        
 
         Console.WriteLine("New connection Host From " + remoteEndPoint.ToString());
 
        
         room.Port = nextPort;
         nextPort++;
-        
-        clients[remoteEndPoint] = clientSocket;
 
-        // Send connection message to client             
-        byte[] connectionData = Encoding.ASCII.GetBytes(room.Id);
+        
+
+        // Send connection message to client
+        byte[] connectionData = Encoding.ASCII.GetBytes(nextPort.ToString());
         serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
+
+        rooms[data.Data.playerId] = room;
+        room.PropertyChanged += room.OnReadyChanged;
 
     }
 
