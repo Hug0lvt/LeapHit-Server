@@ -8,9 +8,13 @@ namespace Shared.DTO
 {
     public enum Action
     {
+        Join,
         Host,
         Connect,
-        Join,
-        End
+        End,
+
+        SendPlayer,
+        RecivePlayer,
+        SendEntities
     }
 }
