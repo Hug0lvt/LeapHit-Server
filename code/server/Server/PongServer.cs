@@ -114,9 +114,7 @@ public class PongServer
         UdpClient clientSocket = new UdpClient(clientEndPoint);
 
         room.playerJoin = new KeyValuePair<Player, UdpClient>(data.Data, clientSocket);
-        room.NbPlayer++;
 
-        
 
         Console.WriteLine("New connection Client from " + remoteEndPoint.ToString());
 
@@ -125,6 +123,7 @@ public class PongServer
         serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
 
         room.PropertyChanged += room.OnReadyChanged;
+        room.NbPlayer++;
 
 
     }

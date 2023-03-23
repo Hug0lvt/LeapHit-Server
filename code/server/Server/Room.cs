@@ -82,12 +82,12 @@ namespace Server
 
             if (maxPlayer == 2)
             {
-                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 3133);
 
                 byte[] receivedDataHost = playerHost.Value.Receive(ref remoteEndPoint);
-                playerJoin.Value.Send(receivedDataHost, receivedDataHost.Length, remoteEndPoint);
-
                 byte[] receivedDataJoin = playerJoin.Value.Receive(ref remoteEndPoint);
+
+                playerJoin.Value.Send(receivedDataHost, receivedDataHost.Length, remoteEndPoint);
                 playerHost.Value.Send(receivedDataJoin, receivedDataJoin.Length, remoteEndPoint);
 
                 Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value));
