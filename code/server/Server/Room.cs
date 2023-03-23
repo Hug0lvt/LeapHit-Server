@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Shared.DTO;
 using System.ComponentModel;
+using System.Text.Json;
 
 namespace Server
 {
@@ -81,6 +82,13 @@ namespace Server
 
             if (maxPlayer == 2)
             {
+                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+
+                byte[] receivedDataHost = playerHost.Value.Receive(ref remoteEndPoint);
+                playerJoin.Value.Send(receivedDataHost, receivedDataHost.Length, remoteEndPoint);
+
+                byte[] receivedDataJoin = playerJoin.Value.Receive(ref remoteEndPoint);
+                playerHost.Value.Send(receivedDataJoin, receivedDataJoin.Length, remoteEndPoint);
 
                 Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value));
 
