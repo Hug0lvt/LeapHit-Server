@@ -110,7 +110,7 @@ public class PongServer
 
 
         // Assign a unique port to the client
-        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort);
+        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, room.Port);
         UdpClient clientSocket = new UdpClient(clientEndPoint);
 
         room.playerJoin = new KeyValuePair<Player, UdpClient>(data.Data, clientSocket);
@@ -124,7 +124,6 @@ public class PongServer
 
         room.PropertyChanged += room.OnReadyChanged;
         room.NbPlayer++;
-
 
     }
 
