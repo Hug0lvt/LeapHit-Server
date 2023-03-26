@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Shared.DTO;
 using System.ComponentModel;
+using System.Text.Json;
 
 namespace Server
 {
@@ -31,20 +32,22 @@ namespace Server
         public int Port { get; set; }
 
 
-        public int nbPlayer = 0;
-
-        public bool maxPlayer
+        public int NbPlayer
         {
-            get { return nbPlayer >= 2; }
+            get
+            {
+                return nbPlayer;
+            }
             set
             {
-                if (nbPlayer >= 2)
+                nbPlayer = value;
+                if (value >= 2)
                 {
-                    maxPlayer = true;
-                    NotifyPropertyChanged("Ready");
+                    NotifyPropertyChanged("nbPlayer");
                 }
             }
         }
+        private int nbPlayer;
 
         
         protected void NotifyPropertyChanged(string propertyName)
@@ -62,10 +65,6 @@ namespace Server
             {
                 byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
 
-                string receivedMessage = Encoding.ASCII.GetString(receivedData);
-                Console.WriteLine("Received from " + remoteEndPoint.ToString() + ": " + receivedMessage);
-
-
                 clientSocket2.Send(receivedData, receivedData.Length, remoteEndPoint);
 
             }
@@ -75,13 +74,21 @@ namespace Server
         {
 
             Room nbPlayer = sender as Room;
-            bool maxPlayer = nbPlayer.maxPlayer;
+            int maxPlayer = nbPlayer.nbPlayer;
 
-            IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, Port);
-            UdpClient serverSocket = new UdpClient(serverEndPoint);
+            //IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, Port);
+            //UdpClient serverSocket = new UdpClient(serverEndPoint);
 
-            if (maxPlayer)
+
+            if (maxPlayer == 2)
             {
+                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 3133);
+
+                byte[] receivedDataHost = playerHost.Value.Receive(ref remoteEndPoint);
+                byte[] receivedDataJoin = playerJoin.Value.Receive(ref remoteEndPoint);
+
+                playerJoin.Value.Send(receivedDataHost, receivedDataHost.Length, remoteEndPoint);
+                playerHost.Value.Send(receivedDataJoin, receivedDataJoin.Length, remoteEndPoint);
 
                 Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value));
 
