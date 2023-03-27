@@ -97,7 +97,7 @@ public class PongServer
 
 
         // Send port message to client
-        byte[] connectionData = Encoding.ASCII.GetBytes(nextPort.ToString());
+        byte[] connectionData = Encoding.ASCII.GetBytes(room.Port.ToString());
         serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
 
         rooms[data.Data.playerId] = room;
@@ -109,17 +109,14 @@ public class PongServer
     {
 
 
-        // Assign a unique port to the client
-        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort);
-        UdpClient clientSocket = new UdpClient(clientEndPoint);
 
-        room.playerJoin = new KeyValuePair<Player, UdpClient>(data.Data, clientSocket);
+        room.playerJoin = new KeyValuePair<Player, UdpClient>(data.Data, room.playerHost.Value);
 
 
         Console.WriteLine("New connection Client from " + remoteEndPoint.ToString());
 
         // Send port message to client
-        byte[] connectionData = Encoding.ASCII.GetBytes(nextPort.ToString());
+        byte[] connectionData = Encoding.ASCII.GetBytes(room.Port.ToString());
         serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
 
         room.PropertyChanged += room.OnReadyChanged;

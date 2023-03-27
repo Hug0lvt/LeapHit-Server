@@ -73,8 +73,8 @@ namespace Server
         public void OnReadyChanged(object sender, PropertyChangedEventArgs e)
         {
 
-            Room nbPlayer = sender as Room;
-            int maxPlayer = nbPlayer.nbPlayer;
+            Room room = sender as Room;
+            int maxPlayer = room.nbPlayer;
 
             //IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, Port);
             //UdpClient serverSocket = new UdpClient(serverEndPoint);
@@ -82,13 +82,15 @@ namespace Server
 
             if (maxPlayer == 2)
             {
-                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 3133);
+                IPEndPoint remoteEndPointHost = new IPEndPoint(IPAddress.Any, room.Port);
+                IPEndPoint remoteEndPointJoin = new IPEndPoint(IPAddress.Any, room.Port);
 
-                byte[] receivedDataHost = playerHost.Value.Receive(ref remoteEndPoint);
-                byte[] receivedDataJoin = playerJoin.Value.Receive(ref remoteEndPoint);
 
-                playerJoin.Value.Send(receivedDataHost, receivedDataHost.Length, remoteEndPoint);
-                playerHost.Value.Send(receivedDataJoin, receivedDataJoin.Length, remoteEndPoint);
+                byte[] receivedDataHost = playerHost.Value.Receive(ref remoteEndPointHost);
+                byte[] receivedDataJoin = playerJoin.Value.Receive(ref remoteEndPointJoin);
+                Console.WriteLine("blabla");
+                playerJoin.Value.Send(receivedDataHost, receivedDataHost.Length, remoteEndPointHost);
+                playerHost.Value.Send(receivedDataJoin, receivedDataJoin.Length, remoteEndPointJoin);
 
                 Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value));
 
