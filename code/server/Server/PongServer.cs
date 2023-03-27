@@ -124,7 +124,6 @@ public class PongServer
         room.PropertyChanged += room.OnReadyChanged;
         room.NbPlayer++;
 
-
     }
 
 }

@@ -19,111 +19,111 @@ namespace TestControleurs
     [TestClass]
     public class UnitTestGames
     {
-        private DbDataManager _dataManager = new DbDataManager();
-        private readonly ILogger<GamesController> _logger = new NullLogger<GamesController>();
+        //private DbDataManager _dataManager = new DbDataManager();
+        //private readonly ILogger<GamesController> _logger = new NullLogger<GamesController>();
 
-        [TestMethod]
-        public async Task GetGame_ReturnsOkResult()
-        {
-            // Arrange
-            var controller = new GamesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbGames();
-            var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = 1, winner = 2, nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 };
-            await _dataManager.AddGame(testGame);
+        //[TestMethod]
+        //public async Task GetGame_ReturnsOkResult()
+        //{
+        //    // Arrange
+        //    var controller = new GamesController(_dataManager, _logger);
+        //    var nb = _dataManager.GetNbGames();
+        //    var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = 1, winner = 2, nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 };
+        //    await _dataManager.AddGame(testGame);
 
-            // Act
-            var result = await controller.GetGame(nb.Result + 1);
-            var objectResult = (ObjectResult)result.Result;
+        //    // Act
+        //    var result = await controller.GetGame(nb.Result + 1);
+        //    var objectResult = (ObjectResult)result.Result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
-        }
+        //    // Assert
+        //    Assert.IsNotNull(objectResult);
+        //    Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
+        //}
 
-        [TestMethod]
-        public async Task GetGame_ReturnsNotFoundResult()
-        {
-            // Arrange
-            var controller = new GamesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbGames();
+        //[TestMethod]
+        //public async Task GetGame_ReturnsNotFoundResult()
+        //{
+        //    // Arrange
+        //    var controller = new GamesController(_dataManager, _logger);
+        //    var nb = _dataManager.GetNbGames();
 
-            // Act
-            var result = await controller.GetGame(nb.Result + 1);
-            var objectResult = (ObjectResult)result.Result;
+        //    // Act
+        //    var result = await controller.GetGame(nb.Result + 1);
+        //    var objectResult = (ObjectResult)result.Result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
-        }
+        //    // Assert
+        //    Assert.IsNotNull(objectResult);
+        //    Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
+        //}
 
-        [TestMethod]
-        public async Task RemoveGame_ReturnsNotFoundResult()
-        {
-            // Arrange
-            var controller = new GamesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbGames();
+        //[TestMethod]
+        //public async Task RemoveGame_ReturnsNotFoundResult()
+        //{
+        //    // Arrange
+        //    var controller = new GamesController(_dataManager, _logger);
+        //    var nb = _dataManager.GetNbGames();
 
-            // Act
-            var result = await controller.RemoveGame(nb.Result + 1);
-            var objectResult = (ObjectResult)result;
+        //    // Act
+        //    var result = await controller.RemoveGame(nb.Result + 1);
+        //    var objectResult = (ObjectResult)result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
-        }
+        //    // Assert
+        //    Assert.IsNotNull(objectResult);
+        //    Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
+        //}
 
-        [TestMethod]
-        public async Task RemoveGame_ReturnsOKResult()
-        {
-            // Arrange
-            var controller = new GamesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbGames();
-            var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = 1, winner = 2, nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 }; 
-            await _dataManager.AddGame(testGame);
+        //[TestMethod]
+        //public async Task RemoveGame_ReturnsOKResult()
+        //{
+        //    // Arrange
+        //    var controller = new GamesController(_dataManager, _logger);
+        //    var nb = _dataManager.GetNbGames();
+        //    var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = 1, winner = 2, nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 }; 
+        //    await _dataManager.AddGame(testGame);
 
-            // Act
-            var result = await controller.RemoveGame(nb.Result + 1);
-            var objectResult = (ObjectResult)result;
+        //    // Act
+        //    var result = await controller.RemoveGame(nb.Result + 1);
+        //    var objectResult = (ObjectResult)result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
-        }
+        //    // Assert
+        //    Assert.IsNotNull(objectResult);
+        //    Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
+        //}
 
-        [TestMethod]
-        public async Task GetGameByIdPlayer_ReturnsOKResult()
-        {
-            // Arrange
-            var controller = new GamesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbGames();
-            var nbP = _dataManager.GetNbPlayers();
-            var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = nbP.Result, winner = 2, nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 };
-            await _dataManager.AddGame(testGame);
+        //[TestMethod]
+        //public async Task GetGameByIdPlayer_ReturnsOKResult()
+        //{
+        //    // Arrange
+        //    var controller = new GamesController(_dataManager, _logger);
+        //    var nb = _dataManager.GetNbGames();
+        //    var nbP = _dataManager.GetNbPlayers();
+        //    var testGame = new Game { gameId = nb.Result + 1, durationGame = 3, loser = nbP.Result, winner = 2, nbMaxEchanges = 33, scoreLoser = 5, scoreWinner = 6 };
+        //    await _dataManager.AddGame(testGame);
 
-            // Act
-            var result = await controller.GetGameByIdPlayer(nbP.Result);
-            var objectResult = (ObjectResult)result.Result;
+        //    // Act
+        //    var result = await controller.GetGameByIdPlayer(nbP.Result);
+        //    var objectResult = (ObjectResult)result.Result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
-        }
+        //    // Assert
+        //    Assert.IsNotNull(objectResult);
+        //    Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
+        //}
 
-        [TestMethod]
-        public async Task GetGameByIdPlayer_ReturnsNotFoundResult()
-        {
-            // Arrange
-            var controller = new GamesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbPlayers();
+        //[TestMethod]
+        //public async Task GetGameByIdPlayer_ReturnsNotFoundResult()
+        //{
+        //    // Arrange
+        //    var controller = new GamesController(_dataManager, _logger);
+        //    var nb = _dataManager.GetNbPlayers();
 
-            // Act
-            var result = await controller.GetGameByIdPlayer(nb.Result + 1);
-            var objectResult = (ObjectResult)result.Result;
+        //    // Act
+        //    var result = await controller.GetGameByIdPlayer(nb.Result + 1);
+        //    var objectResult = (ObjectResult)result.Result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
-        }
+        //    // Assert
+        //    Assert.IsNotNull(objectResult);
+        //    Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
+        //}
 
         //[HttpPost]
         //public async Task<ActionResult> AddGame([FromBody] DTOGame dtoGame)

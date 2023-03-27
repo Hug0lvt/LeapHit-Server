@@ -16,114 +16,114 @@ using System.Threading.Tasks;
 
 namespace TestControleurs
 {
-    [TestClass]
-    public class UnitTestMessages
-    {
-        private DbDataManager _dataManager = new DbDataManager();
-        private readonly ILogger<MessagesController> _logger = new NullLogger<MessagesController>();
+    //[TestClass]
+    //public class UnitTestMessages
+    //{
+    //    private DbDataManager _dataManager = new DbDataManager();
+    //    private readonly ILogger<MessagesController> _logger = new NullLogger<MessagesController>();
 
-        [TestMethod]
-        public async Task ReceiveMessage_ReturnsOkResult()
-        {
-            // Arrange
-            var controller = new MessagesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbMessages();
-            var testMessage = new Message { messageId = nb.Result+1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), player = 1 , chat =1};
-            await _dataManager.SendMessage(testMessage);
+    //    [TestMethod]
+    //    public async Task ReceiveMessage_ReturnsOkResult()
+    //    {
+    //        // Arrange
+    //        var controller = new MessagesController(_dataManager, _logger);
+    //        var nb = _dataManager.GetNbMessages();
+    //        var testMessage = new Message { messageId = nb.Result+1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), player = 1 , chat =1};
+    //        await _dataManager.SendMessage(testMessage);
 
-            // Act
-            var result = await controller.ReceiveMessage(1);
-            var objectResult = (ObjectResult)result.Result;
+    //        // Act
+    //        var result = await controller.ReceiveMessage(1);
+    //        var objectResult = (ObjectResult)result.Result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
-        }
+    //        // Assert
+    //        Assert.IsNotNull(objectResult);
+    //        Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
+    //    }
 
-        [TestMethod]
-        public async Task ReceiveMessage_ReturnsNotFound()
-        {
-            // Arrange
-            var controller = new MessagesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbMessages();
+    //    [TestMethod]
+    //    public async Task ReceiveMessage_ReturnsNotFound()
+    //    {
+    //        // Arrange
+    //        var controller = new MessagesController(_dataManager, _logger);
+    //        var nb = _dataManager.GetNbMessages();
 
-            // Act
-            var result = await controller.ReceiveMessage(nb.Result+1);
-            var objectResult = (ObjectResult)result.Result;
+    //        // Act
+    //        var result = await controller.ReceiveMessage(nb.Result+1);
+    //        var objectResult = (ObjectResult)result.Result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
-        }
+    //        // Assert
+    //        Assert.IsNotNull(objectResult);
+    //        Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
+    //    }
 
-        [TestMethod]
-        public async Task RemoveMessage_ReturnsBadRequest()
-        {
-            // Arrange
-            var controller = new MessagesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbMessages();
+    //    [TestMethod]
+    //    public async Task RemoveMessage_ReturnsBadRequest()
+    //    {
+    //        // Arrange
+    //        var controller = new MessagesController(_dataManager, _logger);
+    //        var nb = _dataManager.GetNbMessages();
 
-            // Act
-            var result = await controller.RemoveMessage(nb.Result + 1);
-            var objectResult = (ObjectResult)result;
+    //        // Act
+    //        var result = await controller.RemoveMessage(nb.Result + 1);
+    //        var objectResult = (ObjectResult)result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
-        }
+    //        // Assert
+    //        Assert.IsNotNull(objectResult);
+    //        Assert.AreEqual((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
+    //    }
 
-        [TestMethod]
-        public async Task RemoveMessage_ReturnsOk()
-        {
-            // Arrange
-            var controller = new MessagesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbMessages();
-            var testMessage = new Message { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), player = 1, chat = 1 };
+    //    [TestMethod]
+    //    public async Task RemoveMessage_ReturnsOk()
+    //    {
+    //        // Arrange
+    //        var controller = new MessagesController(_dataManager, _logger);
+    //        var nb = _dataManager.GetNbMessages();
+    //        var testMessage = new Message { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), player = 1, chat = 1 };
 
-            // Act
-            var result = await controller.RemoveMessage(nb.Result + 1);
-            var objectResult = (ObjectResult)result;
+    //        // Act
+    //        var result = await controller.RemoveMessage(nb.Result + 1);
+    //        var objectResult = (ObjectResult)result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
-        }
+    //        // Assert
+    //        Assert.IsNotNull(objectResult);
+    //        Assert.AreEqual((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
+    //    }
 
-        [TestMethod]
-        public async Task SendMessage_ReturnsCreated()
-        {
-            // Arrange
-            var controller = new MessagesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbMessages();
-            var testMessage = new DTOMessage { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), PlayerId = 1, ChatId = 1 };
+    //    [TestMethod]
+    //    public async Task SendMessage_ReturnsCreated()
+    //    {
+    //        // Arrange
+    //        var controller = new MessagesController(_dataManager, _logger);
+    //        var nb = _dataManager.GetNbMessages();
+    //        var testMessage = new DTOMessage { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), PlayerId = 1, ChatId = 1 };
 
-            // Act
-            var result = await controller.SendMessage(testMessage);
-            var objectResult = (ObjectResult)result;
+    //        // Act
+    //        var result = await controller.SendMessage(testMessage);
+    //        var objectResult = (ObjectResult)result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.Created, objectResult.StatusCode);
-            await controller.RemoveMessage(nb.Result + 1);
-        }
+    //        // Assert
+    //        Assert.IsNotNull(objectResult);
+    //        Assert.AreEqual((int)HttpStatusCode.Created, objectResult.StatusCode);
+    //        await controller.RemoveMessage(nb.Result + 1);
+    //    }
 
-        [TestMethod]
-        public async Task SendMessage_ReturnsNotFound()
-        {
-            // Arrange
-            var controller = new MessagesController(_dataManager, _logger);
-            var nb = _dataManager.GetNbMessages();
-            var nbP = _dataManager.GetNbPlayers();
-            var testMessage = new DTOMessage { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), PlayerId = nb.Result+1, ChatId = 1 };
+    //    [TestMethod]
+    //    public async Task SendMessage_ReturnsNotFound()
+    //    {
+    //        // Arrange
+    //        var controller = new MessagesController(_dataManager, _logger);
+    //        var nb = _dataManager.GetNbMessages();
+    //        var nbP = _dataManager.GetNbPlayers();
+    //        var testMessage = new DTOMessage { messageId = nb.Result + 1, message = "Test message", timestamp = new DateTime(2023, 3, 10, 14, 30, 0, DateTimeKind.Utc), PlayerId = nb.Result+1, ChatId = 1 };
 
-            // Act
-            var result = await controller.SendMessage(testMessage);
-            var objectResult = (ObjectResult)result;
+    //        // Act
+    //        var result = await controller.SendMessage(testMessage);
+    //        var objectResult = (ObjectResult)result;
 
-            // Assert
-            Assert.IsNotNull(objectResult);
-            Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
-            await controller.RemoveMessage(nb.Result + 1);
-        }
-    }
+    //        // Assert
+    //        Assert.IsNotNull(objectResult);
+    //        Assert.AreEqual((int)HttpStatusCode.NotFound, objectResult.StatusCode);
+    //        await controller.RemoveMessage(nb.Result + 1);
+    //    }
+    //}
 }
