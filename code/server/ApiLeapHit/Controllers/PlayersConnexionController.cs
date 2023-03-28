@@ -40,8 +40,8 @@ namespace ApiLeapHit.Controllers
                 player.playerId = id;
                 await _dataManager.AddPlayer(player);
 
-                var response = new ApiResponse<string>($"Le joueur a été créé avec succès. Id du joueur : {id}.", id);
-                return Ok(response);
+                //var response = new ApiResponse<string>($"Le joueur a été créé avec succès. Id du joueur : {id}.", id);
+                return Ok(id);
             }
             catch (Exception ex)
             {
