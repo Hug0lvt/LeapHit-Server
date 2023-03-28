@@ -28,7 +28,8 @@ namespace DataBase.Context
                 var dbUser = Environment.GetEnvironmentVariable("MARIADB_USER", EnvironmentVariableTarget.Process);
                 var dbPassword = Environment.GetEnvironmentVariable("MARIADB_PASSWORD", EnvironmentVariableTarget.Process);
                 var dbServer = Environment.GetEnvironmentVariable("DB_SERVER", EnvironmentVariableTarget.Process);
-                optionsBuilder.UseMySql($"server=leap-hit-team-mysql;port=3306;user={dbUser};password={dbPassword};database={dbDatabase}", new MySqlServerVersion(new Version(10, 11, 1)));
+                Debug.WriteLine(dbPassword);
+                optionsBuilder.UseMySql($"server=leap-hit-team-mysql;port=3306;user=leaphit;password=leaphit;database=leaphit", new MySqlServerVersion(new Version(10, 11, 1)));
 
 
             }
