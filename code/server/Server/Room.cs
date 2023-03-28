@@ -57,7 +57,7 @@ namespace Server
 
 
 
-        public void ReceiveMessages(UdpClient clientSocket1, UdpClient clientSocket2, IPEndPoint endpoint2)
+        public void ReceiveMessages(UdpClient clientSocket1, UdpClient clientSocket2, IPEndPoint endpoint2, SemaphoreSlim semaphore)
         {
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
@@ -65,9 +65,12 @@ namespace Server
             {
                 byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
 
+                semaphore.Wait();
+
                 clientSocket2.Send(receivedData, receivedData.Length, endpoint2);
 
-                //Thread.Sleep(50);
+                semaphore.Release();
+
 
             }
         }
@@ -94,13 +97,21 @@ namespace Server
                 playerJoin.Value.Send(receivedDataHost, receivedDataHost.Length, remoteEndPointHost);
                 playerHost.Value.Send(receivedDataJoin, receivedDataJoin.Length, remoteEndPointJoin);
 
-                Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value, remoteEndPointJoin));
+                SemaphoreSlim semaphore = new SemaphoreSlim(0);
 
 
-                Thread receiveThread2 = new Thread(() => ReceiveMessages(playerJoin.Value, playerHost.Value, remoteEndPointHost));
+                Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value, remoteEndPointJoin, semaphore));
 
+
+                Thread receiveThread2 = new Thread(() => {
+                    // Attente pour que le joueur 1 ait envoyé ses données avant de démarrer la réception des données du joueur 2
+                    semaphore.Wait();
+                    ReceiveMessages(playerJoin.Value, playerHost.Value, remoteEndPointHost, semaphore);
+                });
                 receiveThread1.Start();
                 receiveThread2.Start();
+
+                semaphore.Release();
 
                 receiveThread1.Join();
                 receiveThread2.Join();
