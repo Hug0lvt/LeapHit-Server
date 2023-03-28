@@ -38,6 +38,9 @@ namespace ApiLeapHit.Controllers
                 }
                 while (await _dataManager.GetPlayer(id) != null);
                 player.playerId = id;
+                player.name = id;
+                player.timePlayed = 0;
+                player.nbBallTouchTotal = 0;
                 await _dataManager.AddPlayer(player);
 
                 //var response = new ApiResponse<string>($"Le joueur a été créé avec succès. Id du joueur : {id}.", id);
