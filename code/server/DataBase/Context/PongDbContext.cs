@@ -24,7 +24,7 @@ namespace DataBase.Context
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override async void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
 
@@ -39,7 +39,7 @@ namespace DataBase.Context
                 var dbServer = Environment.GetEnvironmentVariable("DB_SERVER", EnvironmentVariableTarget.Process);
                 Debug.WriteLine(dbPassword);
                 optionsBuilder.UseMySql($"server=leap-hit-team-mysql;port=3306;user=leaphit;password=leaphit;database=leaphit", new MySqlServerVersion(new Version(10, 11, 1)));
-                
+                            
 
             }
         }
