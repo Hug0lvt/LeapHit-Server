@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DbDataManager>();
+builder.Services.AddMvc();
 //builder.Services.AddSingleton<IDataManager, StubData>();
 
 // Add logging
