@@ -57,7 +57,7 @@ namespace Server
 
 
 
-        public void ReceiveMessages(UdpClient clientSocket1, UdpClient clientSocket2)
+        public void ReceiveMessages(UdpClient clientSocket1, UdpClient clientSocket2, IPEndPoint endpoint2)
         {
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
@@ -65,7 +65,9 @@ namespace Server
             {
                 byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
 
-                clientSocket2.Send(receivedData, receivedData.Length, remoteEndPoint);
+                clientSocket2.Send(receivedData, receivedData.Length, endpoint2);
+
+                //Thread.Sleep(50);
 
             }
         }
@@ -88,14 +90,14 @@ namespace Server
 
                 byte[] receivedDataHost = playerHost.Value.Receive(ref remoteEndPointHost);
                 byte[] receivedDataJoin = playerJoin.Value.Receive(ref remoteEndPointJoin);
-                Console.WriteLine("blabla");
+                
                 playerJoin.Value.Send(receivedDataHost, receivedDataHost.Length, remoteEndPointHost);
                 playerHost.Value.Send(receivedDataJoin, receivedDataJoin.Length, remoteEndPointJoin);
 
-                Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value));
+                Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value, remoteEndPointJoin));
 
 
-                Thread receiveThread2 = new Thread(() => ReceiveMessages(playerJoin.Value, playerHost.Value));
+                Thread receiveThread2 = new Thread(() => ReceiveMessages(playerJoin.Value, playerHost.Value, remoteEndPointHost));
 
                 receiveThread1.Start();
                 receiveThread2.Start();
