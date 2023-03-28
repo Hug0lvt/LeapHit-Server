@@ -1,4 +1,6 @@
+using DataBase.Context;
 using DataBase.DataManager;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DbDataManager>();
+
+
+
+var context = new PongDbContext(); //ou une autre classe dérivant de TheDbContext
+await context.Database.EnsureCreatedAsync();
+
+
 //builder.Services.AddSingleton<IDataManager, StubData>();
 
 // Add logging

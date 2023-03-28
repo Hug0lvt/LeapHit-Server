@@ -15,7 +15,16 @@ namespace DataBase.Context
         public PongDbContext() { }
         public PongDbContext(DbContextOptions<PongDbContext> options) : base(options) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Player>().ToTable("Players");
+            modelBuilder.Entity<Game>().ToTable("Games");
+            modelBuilder.Entity<Message>().ToTable("Messages");
+            modelBuilder.Entity<Chat>().ToTable("Chats");
+
+        }
+
+        protected override async void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
 
@@ -28,18 +37,11 @@ namespace DataBase.Context
                 var dbUser = Environment.GetEnvironmentVariable("MARIADB_USER", EnvironmentVariableTarget.Process);
                 var dbPassword = Environment.GetEnvironmentVariable("MARIADB_PASSWORD", EnvironmentVariableTarget.Process);
                 var dbServer = Environment.GetEnvironmentVariable("DB_SERVER", EnvironmentVariableTarget.Process);
-                optionsBuilder.UseMySql($"server=leap-hit-team-mysql;port=3306;user={dbUser};password={dbPassword};database={dbDatabase}", new MySqlServerVersion(new Version(10, 11, 1)));
-
+                Debug.WriteLine(dbPassword);
+                optionsBuilder.UseMySql($"server=leap-hit-team-mysql;port=3306;user=leaphit;password=leaphit;database=leaphit", new MySqlServerVersion(new Version(10, 11, 1)));
+                            
 
             }
-        }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Player>().ToTable("Players");
-            modelBuilder.Entity<Game>().ToTable("Games");
-            modelBuilder.Entity<Message>().ToTable("Messages");
-            modelBuilder.Entity<Chat>().ToTable("Chats");
-
         }
     }
 }
