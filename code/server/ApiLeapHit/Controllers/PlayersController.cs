@@ -22,36 +22,6 @@ namespace ApiLeapHit.Controllers
             _logger = logger;
         }
 
-        [HttpGet("/clePlayer/{idIdentification}")]
-        public async Task<ActionResult<ApiResponse<string>>> CreatePlayer(string idIdentification)
-        {
-            try
-            {
-                if(!idIdentification.Equals("K02q7naLzjmodzAFfoSO4mPydr7W5hydPMrHtA6D"))
-                {
-                    return StatusCode((int)HttpStatusCode.NotFound, new ApiResponse("Le numéo n'est pas correct."));
-                }
-                var player = new Player();
-                string id;
-                do
-                {
-                    // Générer un id unique avec des chiffres et des lettres
-                    id = Guid.NewGuid().ToString("N");
-                }
-                while (await _dataManager.GetPlayer(id) != null); 
-                player.playerId = id;
-                await _dataManager.AddPlayer(player);
-
-                var response = new ApiResponse<string>($"Le joueur a été créé avec succès. Id du joueur : {id}.", id);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Une erreur est survenue lors de la création du joueur.");
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse("Une erreur est survenue lors de la création du joueur."));
-            }
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse<DTOPlayer>>> GetPlayer(string id)
         {
