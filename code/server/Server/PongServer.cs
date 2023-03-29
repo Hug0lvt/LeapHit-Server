@@ -38,9 +38,10 @@ public class PongServer
             byte[] receivedData = serverSocket.Receive(ref remoteEndPoint);
             string fileJson = Encoding.UTF8.GetString(receivedData);
             ObjectTransfert<Player> data = JsonSerializer.Deserialize<ObjectTransfert<Player>>(fileJson);
-            
+
             if (data.Informations.Action == Shared.DTO.Action.Host)
             {
+
                 Host(data, remoteEndPoint, serverSocket, false);
 
             }
@@ -105,26 +106,29 @@ public class PongServer
         rooms[data.Data.playerId] = room;
         room.PropertyChanged += room.OnReadyChanged;
 
+        Console.WriteLine("FIN HOST...............");
+
     }
 
     private void Join(ObjectTransfert<Player> data, IPEndPoint remoteEndPoint, UdpClient serverSocket, Room room)
     {
 
         room.playerJoin = new KeyValuePair<Player, UdpClient>(data.Data, room.playerHost.Value);
-
+        
 
         Console.WriteLine("New connection Client from " + remoteEndPoint.ToString());
 
-        Tuple<int, bool> dataToSend = new Tuple<int, bool>(room.Port, true);
+        Tuple<int, bool> dataToSend = new Tuple<int, bool>(room.Port, false);
         Console.WriteLine(JsonSerializer.Serialize(dataToSend));
 
         // Send port message to client
         byte[] connectionData = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(dataToSend));
         serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
-
+        
         room.PropertyChanged += room.OnReadyChanged;
         room.NbPlayer++;
 
+        Console.WriteLine("FIN JOIN...............");
     }
 
 }
