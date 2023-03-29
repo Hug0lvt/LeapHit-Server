@@ -80,8 +80,6 @@ namespace Server
             Room room = sender as Room;
             int maxPlayer = room.nbPlayer;
 
-            //IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, Port);
-            //UdpClient serverSocket = new UdpClient(serverEndPoint);
 
 
             if (maxPlayer == 2)

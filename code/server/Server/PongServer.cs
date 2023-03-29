@@ -95,9 +95,11 @@ public class PongServer
         nextPort++;
 
 
+        Tuple<int, bool> dataToSend = new Tuple<int, bool>(room.Port, true);
+        Console.WriteLine(JsonSerializer.Serialize(dataToSend));
 
         // Send port message to client
-        byte[] connectionData = Encoding.ASCII.GetBytes(room.Port.ToString());
+        byte[] connectionData = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(dataToSend));
         serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
 
         rooms[data.Data.playerId] = room;
@@ -108,15 +110,16 @@ public class PongServer
     private void Join(ObjectTransfert<Player> data, IPEndPoint remoteEndPoint, UdpClient serverSocket, Room room)
     {
 
-
-
         room.playerJoin = new KeyValuePair<Player, UdpClient>(data.Data, room.playerHost.Value);
 
 
         Console.WriteLine("New connection Client from " + remoteEndPoint.ToString());
 
+        Tuple<int, bool> dataToSend = new Tuple<int, bool>(room.Port, true);
+        Console.WriteLine(JsonSerializer.Serialize(dataToSend));
+
         // Send port message to client
-        byte[] connectionData = Encoding.ASCII.GetBytes(room.Port.ToString());
+        byte[] connectionData = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(dataToSend));
         serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
 
         room.PropertyChanged += room.OnReadyChanged;
