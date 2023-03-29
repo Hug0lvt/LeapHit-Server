@@ -34,7 +34,7 @@ namespace ApiLeapHit.Controllers
                 do
                 {
                     // Générer un id unique avec des chiffres et des lettres
-                    id = Guid.NewGuid().ToString("N");
+                    id = Guid.NewGuid().ToString("N").Substring(0, 6);
                 }
                 while (await _dataManager.GetPlayer(id) != null);
                 player.playerId = id;
