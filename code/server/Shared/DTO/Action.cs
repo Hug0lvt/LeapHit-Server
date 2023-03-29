@@ -15,6 +15,7 @@ namespace Shared.DTO
 
         SendPlayer,
         RecivePlayer,
-        SendEntities
+        SendEntities,
+        SendScore
     }
 }

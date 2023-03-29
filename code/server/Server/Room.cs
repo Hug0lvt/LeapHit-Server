@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Shared.DTO;
 using System.ComponentModel;
 using System.Text.Json;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Server
 {
@@ -20,7 +21,7 @@ namespace Server
             Id = id;
             Availaible = availaible;
         }
-
+        Tuple<int, int> ScoreImp = new(0, 0);
         public bool Availaible { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -57,23 +58,39 @@ namespace Server
 
 
 
-        public void ReceiveMessages(UdpClient clientSocket1, UdpClient clientSocket2, IPEndPoint endpoint2, Semaphore semaphore)
+        public void ReceiveMessages(UdpClient clientSocket1, UdpClient clientSocket2, IPEndPoint endpoint2, Semaphore semaphore,bool isHost)
         {
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
             Thread secondsCount = new Thread(new ThreadStart(CountSeconds));
+
+            
             secondsCount.Start();
 
             //while (secondsCount.ThreadState==ThreadState.Running )
-            while (true)
+            while (ScoreImp.Item1<6 && ScoreImp.Item2 < 6)
             {
                 byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
+                if (isHost) {
+                    string fileJson = Encoding.UTF8.GetString(receivedData);
+                    try
+                    {
+                        ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>> data = JsonSerializer.Deserialize<ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>>>(fileJson);
+                        ScoreImp = data.Data.Item2 != null ? data.Data.Item2 : ScoreImp;
+                    }
+                    catch (Exception ex) { }
+                    
+                   
+                    Console.WriteLine("score 1 : " + ScoreImp.Item1 + " " + ScoreImp.Item2);
+                }
+               
                 semaphore.WaitOne();
 
                 clientSocket2.Send(receivedData, receivedData.Length, endpoint2);
                 semaphore.Release();
             }
             Availaible = true;
+            Console.WriteLine("Game Finished Am i host " + isHost);
         }
 
         static void CountSeconds()
@@ -110,12 +127,12 @@ namespace Server
                     Semaphore semaphore = new Semaphore(2, 2);
 
 
-                    Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value, remoteEndPointJoin, semaphore));
+                    Thread receiveThread1 = new Thread(() => ReceiveMessages(playerHost.Value, playerJoin.Value, remoteEndPointJoin, semaphore,true));
 
 
                     Thread receiveThread2 = new Thread(() =>
                     {
-                        ReceiveMessages(playerJoin.Value, playerHost.Value, remoteEndPointHost, semaphore);
+                        ReceiveMessages(playerJoin.Value, playerHost.Value, remoteEndPointHost, semaphore,false);
                     });
                     receiveThread1.Start();
                     receiveThread2.Start();
