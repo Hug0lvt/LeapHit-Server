@@ -49,7 +49,7 @@ public class PongServer
             if (data.Informations.Action == Shared.DTO.Action.Join)
             {
                 var choisenRoom = rooms.FirstOrDefault(room => room.Key == data.Informations.IdRoom);
-                if(choisenRoom.Value != default && choisenRoom.Value.Availaible)
+                if(choisenRoom.Value != default)
                 {
                     Join(data, remoteEndPoint, serverSocket, choisenRoom.Value);
                 }
