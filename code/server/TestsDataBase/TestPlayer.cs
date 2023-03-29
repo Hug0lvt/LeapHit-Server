@@ -10,7 +10,7 @@ namespace TestsDataBase
         public void Add_Test()
         {
             var options = new DbContextOptionsBuilder<PongDbContext>()
-            .UseInMemoryDatabase(databaseName: "Add_Test_Database_Player")
+            .UseInMemoryDatabase(databaseName: "Add_Test_Database_Players")
             .Options;
 
             using (var context = new PongDbContext(options))
@@ -30,7 +30,7 @@ namespace TestsDataBase
         public void Modify_Test()
         {
             var options = new DbContextOptionsBuilder<PongDbContext>()
-                .UseInMemoryDatabase(databaseName: "Modify_Test_Database_Player")
+                .UseInMemoryDatabase(databaseName: "Modify_Test_Database_Players")
                 .Options;
 
             using (var context = new PongDbContext(options))
@@ -92,10 +92,10 @@ namespace TestsDataBase
 
 
         [Fact]
-        public void GetAllSkin_Test()
+        public void GetAllPlayer_Test()
         {
             var options = new DbContextOptionsBuilder<PongDbContext>()
-                .UseInMemoryDatabase(databaseName: "GetAllSkin_Test_Database_Skins")
+                .UseInMemoryDatabase(databaseName: "GetAllSkin_Test_Database_Players")
                 .Options;
 
             using (var context = new PongDbContext(options))

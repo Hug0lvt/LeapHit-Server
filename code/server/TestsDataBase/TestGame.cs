@@ -16,7 +16,7 @@ namespace TestsDataBase
         public void Add_Test()
         {
             var options = new DbContextOptionsBuilder<PongDbContext>()
-            .UseInMemoryDatabase(databaseName: "Add_Test_Database_Game")
+            .UseInMemoryDatabase(databaseName: "Add_Test_Database_Games")
             .Options;
 
             using (var context = new PongDbContext(options))
@@ -109,10 +109,10 @@ namespace TestsDataBase
 
 
         [Fact]
-        public void GetAllSkin_Test()
+        public void GetAllGame_Test()
         {
             var options = new DbContextOptionsBuilder<PongDbContext>()
-                .UseInMemoryDatabase(databaseName: "GetAllSkin_Test_Database_Skins")
+                .UseInMemoryDatabase(databaseName: "GetAllSkin_Test_Database_Games")
                 .Options;
 
             using (var context = new PongDbContext(options))

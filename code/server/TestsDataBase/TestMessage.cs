@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using xunit;
 
 namespace TestsDataBase
 {
@@ -39,7 +40,7 @@ namespace TestsDataBase
         public void Modify_Test()
         {
             var options = new DbContextOptionsBuilder<PongDbContext>()
-                .UseInMemoryDatabase(databaseName: "Modify_Test_Database_Player")
+                .UseInMemoryDatabase(databaseName: "Modify_Test_Database_Messages")
                 .Options;
 
             using (var context = new PongDbContext(options))
@@ -76,7 +77,7 @@ namespace TestsDataBase
         public void Delete_Test()
         {
             var options = new DbContextOptionsBuilder<PongDbContext>()
-                .UseInMemoryDatabase(databaseName: "Delete_Test_Database_Chats")
+                .UseInMemoryDatabase(databaseName: "Delete_Test_Database_Messages")
                 .Options;
 
             using (var context = new PongDbContext(options))
@@ -109,10 +110,10 @@ namespace TestsDataBase
 
 
         [Fact]
-        public void GetAllSkin_Test()
+        public void GetAllMessage_Test()
         {
             var options = new DbContextOptionsBuilder<PongDbContext>()
-                .UseInMemoryDatabase(databaseName: "GetAllSkin_Test_Database_Skins")
+                .UseInMemoryDatabase(databaseName: "GetAllSkin_Test_Database_Messages")
                 .Options;
 
             using (var context = new PongDbContext(options))
