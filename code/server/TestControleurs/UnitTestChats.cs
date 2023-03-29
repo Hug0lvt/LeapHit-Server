@@ -20,26 +20,28 @@ namespace TestControleurs
     [TestClass]
     public class UnitTestChats
     {
-        //private  DbDataManager _dataManager = new DbDataManager(); 
-        //private readonly ILogger<ChatsController> _logger = new NullLogger<ChatsController>();
+        private readonly Mock<DbDataManager> _dataManagerMock = new Mock<DbDataManager>();
+        private readonly ILogger<ChatsController> _logger = new NullLogger<ChatsController>();
 
-        //[TestMethod]
-        //public async Task AddChat_ReturnsOkResult_WhenChatIsAdded()
-        //{
-        //    // Arrange
-        //    var player1 = new Player { playerId = 1, name = "Player1" };
-        //    var player2 = new Player { playerId = 2, name = "Player2" };
-        //    var dtoChat = new DTOChat { PlayerId1 = player1.playerId, PlayerId2 = player2.playerId };
-        //    var controller = new ChatsController(_dataManager, _logger);
+        [TestMethod]
+        public async Task AddChat_ReturnsOkResult_WhenChatIsAdded()
+        {
+            // Arrange
+            var player1 = new Player { playerId = "test", name = "Player1" };
+            var player2 = new Player { playerId = "test2", name = "Player2" };
+            var dtoChat = new DTOChat { PlayerId1 = player1.playerId, PlayerId2 = player2.playerId };
+            _dataManagerMock.Setup(dm => dm.GetPlayer(dtoChat.PlayerId1)).ReturnsAsync(player1);
+            _dataManagerMock.Setup(dm => dm.GetPlayer(dtoChat.PlayerId2)).ReturnsAsync(player2);
+            var controller = new ChatsController(_dataManagerMock.Object, _logger);
 
-        //    // Act
-        //    var result = await controller.AddChat(dtoChat);
-        //    var objectResult = result as ObjectResult;
+            // Act
+            var result = await controller.AddChat(dtoChat);
+            var objectResult = result as ObjectResult;
 
-        //    // Assert
-        //    Assert.IsNotNull(objectResult);
-        //    Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
-        //}
+            // Assert
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
+        }
 
         //[TestMethod]
         //public async Task AddChat_ReturnsBadRequestResult()
@@ -73,7 +75,7 @@ namespace TestControleurs
         //    Assert.IsNotNull(objectResult);
         //    Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
         //}
-    
+
 
         ////[TestMethod]
         ////public async Task GetChats_ReturnsNotFoundResult()
