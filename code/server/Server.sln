@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientConsole", "ClientCons
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{CA1465F2-A006-4AF6-8231-59DB00963BD0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsDataBase", "TestsDataBase\TestsDataBase.csproj", "{BE7D3D6B-1CA1-47F9-93BE-0415708571AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,12 +55,17 @@ Global
 		{CA1465F2-A006-4AF6-8231-59DB00963BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA1465F2-A006-4AF6-8231-59DB00963BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA1465F2-A006-4AF6-8231-59DB00963BD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE7D3D6B-1CA1-47F9-93BE-0415708571AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE7D3D6B-1CA1-47F9-93BE-0415708571AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE7D3D6B-1CA1-47F9-93BE-0415708571AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE7D3D6B-1CA1-47F9-93BE-0415708571AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A9DFF203-7F27-44BA-A460-F65C01D0EDFD} = {12A97D16-34BB-4D4F-9F76-D74061A9BA77}
+		{BE7D3D6B-1CA1-47F9-93BE-0415708571AA} = {12A97D16-34BB-4D4F-9F76-D74061A9BA77}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4BE2DC93-D511-4DA9-9C47-F286E71354BA}

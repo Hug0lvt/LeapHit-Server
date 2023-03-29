@@ -15,15 +15,7 @@ namespace DataBase.Context
         public PongDbContext() { }
         public PongDbContext(DbContextOptions<PongDbContext> options) : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Player>().ToTable("Players");
-            modelBuilder.Entity<Game>().ToTable("Games");
-            modelBuilder.Entity<Message>().ToTable("Messages");
-            modelBuilder.Entity<Chat>().ToTable("Chats");
-
-        }
-
+        
         protected override async void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -42,6 +34,14 @@ namespace DataBase.Context
                             
 
             }
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Player>().ToTable("Players");
+            modelBuilder.Entity<Game>().ToTable("Games");
+            modelBuilder.Entity<Message>().ToTable("Messages");
+            modelBuilder.Entity<Chat>().ToTable("Chats");
+
         }
     }
 }
