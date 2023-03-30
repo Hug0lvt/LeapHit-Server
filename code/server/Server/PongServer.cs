@@ -62,11 +62,14 @@ public class PongServer
                 Console.WriteLine("Connection " + choisenRoom.Key);
                 if (choisenRoom.Value != default )
                 {
-                    Join(data, remoteEndPoint, serverSocket, choisenRoom.Value);
+                    Thread join = new Thread(() => Join(data, remoteEndPoint, serverSocket, choisenRoom.Value));
+                    join.Start();
+                   
                 }
                 else
                 {
-                    Host(data, remoteEndPoint, serverSocket, true);
+                    Thread host = new Thread(() => Host(data, remoteEndPoint, serverSocket, true));
+                    host.Start();
                 }
 
             }

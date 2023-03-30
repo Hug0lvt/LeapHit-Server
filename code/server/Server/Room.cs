@@ -78,8 +78,6 @@ namespace Server
                         ScoreImp = data.Data.Item2 != null ? data.Data.Item2 : ScoreImp;
                     }
                     catch (Exception ex) { }
-                    
-                   
                   
                 }
                
