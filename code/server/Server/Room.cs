@@ -64,11 +64,9 @@ namespace Server
 
             Thread secondsCount = new Thread(new ThreadStart(CountSeconds));
 
-            
             secondsCount.Start();
 
-            //while (secondsCount.ThreadState==ThreadState.Running )
-            while (ScoreImp.Item1<6 && ScoreImp.Item2 < 6)
+            while ((ScoreImp.Item1<6 && ScoreImp.Item2 < 6) || secondsCount.ThreadState == ThreadState.Running)
             {
                 byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
                 if (isHost) {
