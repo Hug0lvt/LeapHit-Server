@@ -31,6 +31,7 @@ namespace Server
         public KeyValuePair <Player, UdpClient> playerHost;
         public KeyValuePair <Player, UdpClient> playerJoin;
         public int Port { get; set; }
+        public bool gameRunning=true ;
 
 
         public int NbPlayer
@@ -62,11 +63,11 @@ namespace Server
         {
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
-            Thread secondsCount = new Thread(new ThreadStart(CountSeconds));
+            Thread secondsCount = new Thread(() => CountSeconds() );
 
             secondsCount.Start();
 
-            while ((ScoreImp.Item1<6 && ScoreImp.Item2 < 6) || secondsCount.ThreadState == ThreadState.Running)
+            while ((ScoreImp.Item1<6 && ScoreImp.Item2 < 6) && gameRunning)
             {
                 byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
                 if (isHost) {
@@ -79,7 +80,7 @@ namespace Server
                     catch (Exception ex) { }
                     
                    
-                    Console.WriteLine("score 1 : " + ScoreImp.Item1 + " " + ScoreImp.Item2);
+                  
                 }
                
                 semaphore.WaitOne();
@@ -88,17 +89,19 @@ namespace Server
                 semaphore.Release();
             }
             Availaible = true;
+           
             Console.WriteLine("Game Finished Am i host " + isHost);
         }
 
-        static void CountSeconds()
+        private void CountSeconds()
         {
             int seconds = 0;
-            while (seconds<=121)
+            while (seconds<=122)
             {
                 seconds++;
                 Thread.Sleep(1000);
             }
+            gameRunning = false;
         }
 
         public void OnReadyChanged(object sender, PropertyChangedEventArgs e)
