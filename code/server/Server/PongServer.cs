@@ -62,17 +62,16 @@ public class PongServer
                 Console.WriteLine("Connection " + choisenRoom.Key);
                 if (choisenRoom.Value != default )
                 {
-                    Thread join = new Thread(() => Join(data, remoteEndPoint, serverSocket, choisenRoom.Value));
-                    join.Start();
+                   Join(data, remoteEndPoint, serverSocket, choisenRoom.Value);
                    
                 }
                 else
                 {
-                    Thread host = new Thread(() => Host(data, remoteEndPoint, serverSocket, true));
-                    host.Start();
+                    Host(data, remoteEndPoint, serverSocket, true);
                 }
 
             }
+            Console.WriteLine("");
 
         }
 
@@ -80,11 +79,22 @@ public class PongServer
 
     private void Host(ObjectTransfert<Player> data, IPEndPoint remoteEndPoint, UdpClient serverSocket, bool availaible)
     {
+        var choisenRoom = rooms.FirstOrDefault(room => room.Value.Free);
+        var chosenPort = nextPort;
+        if (choisenRoom.Value != default)
+        {
+            chosenPort= choisenRoom.Value.Port;
+            choisenRoom.Value.playerHost.Value.Close();
+            choisenRoom.Value.playerJoin.Value.Close();
+            rooms.Remove(choisenRoom.Key);
+            choisenRoom = default;
+        }
+
         Room room = new Room(data.Data.playerId, availaible);
 
 
         // Assign a unique port to the client
-        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, nextPort);
+        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, chosenPort);
         UdpClient clientSocket = new UdpClient(clientEndPoint);
 
         room.playerHost = new KeyValuePair<Player,UdpClient>(data.Data,clientSocket);
@@ -95,8 +105,12 @@ public class PongServer
         Console.WriteLine("New connection Host From " + remoteEndPoint.ToString());
 
        
-        room.Port = nextPort;
-        nextPort++;
+        room.Port = chosenPort;
+        if(chosenPort==nextPort)
+        {
+            nextPort++;
+        }
+       
 
 
         Tuple<int, bool> dataToSend = new Tuple<int, bool>(room.Port, true);
@@ -107,7 +121,7 @@ public class PongServer
         serverSocket.Send(connectionData, connectionData.Length, remoteEndPoint);
 
         rooms[data.Data.playerId] = room;
-        room.PropertyChanged += room.OnReadyChanged;
+        
 
         Console.WriteLine("FIN HOST...............");
 

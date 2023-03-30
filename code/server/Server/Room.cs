@@ -24,6 +24,8 @@ namespace Server
         Tuple<int, int> ScoreImp = new(0, 0);
         public bool Availaible { get; set; }
 
+        public bool Free { get; set; }=false;
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public string Id { get; set; }
@@ -86,8 +88,14 @@ namespace Server
                 clientSocket2.Send(receivedData, receivedData.Length, endpoint2);
                 semaphore.Release();
             }
-            Availaible = true;
-           
+            Free = true;
+          
+            /*     playerHost = default;
+                 playerJoin = default;
+                 gameRunning = true;
+                 ScoreImp = new(0, 0);*/
+
+
             Console.WriteLine("Game Finished Am i host " + isHost);
         }
 
@@ -102,10 +110,10 @@ namespace Server
             gameRunning = false;
         }
 
-        public void OnReadyChanged(object sender, PropertyChangedEventArgs e)
+        async public void OnReadyChanged(object sender, PropertyChangedEventArgs e)
         {
-            /*Thread principal = new Thread(() =>
-            {*/
+            await Task.Run(() =>
+            {
                 Room room = sender as Room;
                 int maxPlayer = room.nbPlayer;
 
@@ -141,8 +149,8 @@ namespace Server
                     receiveThread2.Join();
                 }
 
-            /*});
-            principal.Start();*/
+            });
+            
         }
             
 
