@@ -115,6 +115,7 @@ namespace Server
             }
             if (isHost)
             {
+                semaphore.Release();
                 playerJoin.Value.Close();
             }
             else
