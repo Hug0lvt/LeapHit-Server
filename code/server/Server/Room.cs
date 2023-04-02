@@ -22,6 +22,9 @@ namespace Server
             Availaible = availaible;
         }
         Tuple<int, int> ScoreImp = new(0, 0);
+
+        ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>> data ;
+
         public bool Availaible { get; set; }
 
         public bool Free { get; set; }=false;
@@ -66,36 +69,59 @@ namespace Server
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
             Thread secondsCount = new Thread(() => CountSeconds() );
-
+            bool isDisconected=false;
             secondsCount.Start();
 
             while ((ScoreImp.Item1<6 && ScoreImp.Item2 < 6) && gameRunning)
             {
-                byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
-                if (isHost) {
-                    string fileJson = Encoding.UTF8.GetString(receivedData);
-                    try
-                    {
-                        ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>> data = JsonSerializer.Deserialize<ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>>>(fileJson);
-                        ScoreImp = data.Data.Item2 != null ? data.Data.Item2 : ScoreImp;
-                    }
-                    catch (Exception ex) { }
+                try
+                {
+                    byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
+                    if (isHost) {
+                        string fileJson = Encoding.UTF8.GetString(receivedData);
+                        try
+                        {
+                            data = JsonSerializer.Deserialize<ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>>>(fileJson);
+                            ScoreImp = data.Data.Item2 != null ? data.Data.Item2 : ScoreImp;
+                        }
+                        catch (Exception ex) { }
                   
-                }
-               
-                semaphore.WaitOne();
+                    }
+                    //semaphore.WaitOne();
 
-                clientSocket2.Send(receivedData, receivedData.Length, endpoint2);
-                semaphore.Release();
+                    clientSocket2.Send(receivedData, receivedData.Length, endpoint2);
+                    //semaphore.Release();
+
+                } catch (SocketException){
+                    isDisconected = true;
+                    break;
+                }
+            }
+            //Tuple<GameEntities, Tuple<int, int>> game = new Tuple<GameEntities, Tuple<int, int>>(new GameEntities(new Tuple<float,float>(0,0),0), ScoreImp);
+            /* ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>> data2 = new ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>>() {
+                 Informations = new Informations(Shared.DTO.Action.End, 0, typeof(Tuple<GameEntities, Tuple<int, int>>).ToString()),
+                 Data = game
+             };*/
+            if (!isDisconected)
+            {
+                data.Informations.Action = Shared.DTO.Action.End;
+                string sendFinish = JsonSerializer.Serialize(data);
+                byte[] sendFinishByt = Encoding.ASCII.GetBytes(sendFinish);
+                try
+                {
+                    clientSocket2.Send(sendFinishByt, sendFinishByt.Length, endpoint2);
+                }
+                catch (Exception ex) { }
+            }
+            if (isHost)
+            {
+                playerJoin.Value.Close();
+            }
+            else
+            {
+                playerHost.Value.Close();
             }
             Free = true;
-          
-            /*     playerHost = default;
-                 playerJoin = default;
-                 gameRunning = true;
-                 ScoreImp = new(0, 0);*/
-
-
             Console.WriteLine("Game Finished Am i host " + isHost);
         }
 

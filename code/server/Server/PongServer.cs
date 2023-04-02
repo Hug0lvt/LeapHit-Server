@@ -84,8 +84,6 @@ public class PongServer
         if (choisenRoom.Value != default)
         {
             chosenPort= choisenRoom.Value.Port;
-            choisenRoom.Value.playerHost.Value.Close();
-            choisenRoom.Value.playerJoin.Value.Close();
             rooms.Remove(choisenRoom.Key);
             choisenRoom = default;
         }
