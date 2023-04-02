@@ -87,12 +87,12 @@ namespace Server
                         catch (Exception ex) { }
                   
                     }
-                    //semaphore.WaitOne();
-
+                    semaphore.WaitOne();
                     clientSocket2.Send(receivedData, receivedData.Length, endpoint2);
-                    //semaphore.Release();
+                    semaphore.Release();
 
                 } catch (SocketException){
+                    semaphore.Release();
                     isDisconected = true;
                     break;
                 }
