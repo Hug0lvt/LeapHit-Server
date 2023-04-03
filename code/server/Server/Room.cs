@@ -92,7 +92,11 @@ namespace Server
                     semaphore.Release();
 
                 } catch (SocketException){
-                    semaphore.Release();
+                    try
+                    {
+                        semaphore.Release();
+
+                    }catch { }
                     isDisconected = true;
                     break;
                 }
@@ -115,7 +119,12 @@ namespace Server
             }
             if (isHost)
             {
-                semaphore.Release();
+                try
+                {
+                    semaphore.Release();
+
+                }
+                catch { }
                 playerJoin.Value.Close();
             }
             else
