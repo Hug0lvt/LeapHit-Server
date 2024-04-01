@@ -22,7 +22,12 @@ namespace Server
             Availaible = availaible;
         }
         Tuple<int, int> ScoreImp = new(0, 0);
+
+        ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>> data ;
+
         public bool Availaible { get; set; }
+
+        public bool Free { get; set; }=false;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -64,30 +69,69 @@ namespace Server
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
             Thread secondsCount = new Thread(() => CountSeconds() );
-
+            bool isDisconected=false;
             secondsCount.Start();
 
             while ((ScoreImp.Item1<6 && ScoreImp.Item2 < 6) && gameRunning)
             {
-                byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
-                if (isHost) {
-                    string fileJson = Encoding.UTF8.GetString(receivedData);
+                try
+                {
+                    byte[] receivedData = clientSocket1.Receive(ref remoteEndPoint);
+                    if (isHost) {
+                        string fileJson = Encoding.UTF8.GetString(receivedData);
+                        try
+                        {
+                            data = JsonSerializer.Deserialize<ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>>>(fileJson);
+                            ScoreImp = data.Data.Item2 != null ? data.Data.Item2 : ScoreImp;
+                        }
+                        catch (Exception ex) { }
+                  
+                    }
+                    semaphore.WaitOne();
+                    clientSocket2.Send(receivedData, receivedData.Length, endpoint2);
+                    semaphore.Release();
+
+                } catch (SocketException){
                     try
                     {
-                        ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>> data = JsonSerializer.Deserialize<ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>>>(fileJson);
-                        ScoreImp = data.Data.Item2 != null ? data.Data.Item2 : ScoreImp;
-                    }
-                    catch (Exception ex) { }
-                  
-                }
-               
-                semaphore.WaitOne();
+                        semaphore.Release();
 
-                clientSocket2.Send(receivedData, receivedData.Length, endpoint2);
-                semaphore.Release();
+                    }catch { }
+                    isDisconected = true;
+                    break;
+                }
             }
-            Availaible = true;
-           
+            //Tuple<GameEntities, Tuple<int, int>> game = new Tuple<GameEntities, Tuple<int, int>>(new GameEntities(new Tuple<float,float>(0,0),0), ScoreImp);
+            /* ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>> data2 = new ObjectTransfert<Tuple<GameEntities, Tuple<int, int>>>() {
+                 Informations = new Informations(Shared.DTO.Action.End, 0, typeof(Tuple<GameEntities, Tuple<int, int>>).ToString()),
+                 Data = game
+             };*/
+            if (!isDisconected)
+            {
+                data.Informations.Action = Shared.DTO.Action.End;
+                string sendFinish = JsonSerializer.Serialize(data);
+                byte[] sendFinishByt = Encoding.ASCII.GetBytes(sendFinish);
+                try
+                {
+                    clientSocket2.Send(sendFinishByt, sendFinishByt.Length, endpoint2);
+                }
+                catch (Exception ex) { }
+            }
+            if (isHost)
+            {
+                try
+                {
+                    semaphore.Release();
+
+                }
+                catch { }
+                playerJoin.Value.Close();
+            }
+            else
+            {
+                playerHost.Value.Close();
+            }
+            Free = true;
             Console.WriteLine("Game Finished Am i host " + isHost);
         }
 
@@ -102,10 +146,10 @@ namespace Server
             gameRunning = false;
         }
 
-        public void OnReadyChanged(object sender, PropertyChangedEventArgs e)
+        async public void OnReadyChanged(object sender, PropertyChangedEventArgs e)
         {
-            /*Thread principal = new Thread(() =>
-            {*/
+            await Task.Run(() =>
+            {
                 Room room = sender as Room;
                 int maxPlayer = room.nbPlayer;
 
@@ -141,8 +185,8 @@ namespace Server
                     receiveThread2.Join();
                 }
 
-            /*});
-            principal.Start();*/
+            });
+            
         }
             
 
